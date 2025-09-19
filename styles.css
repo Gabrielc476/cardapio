@@ -1,305 +1,559 @@
-/* --- GERAL E PALETA DE CORES FINAL --- */
+/**
+ * @file styles.css
+ * @author Gabriel Castro (comentado por Gemini)
+ * @brief Folha de estilos principal para a aplicação de cardápio.
+ * Define a aparência geral, layout, cores e responsividade.
+ */
+
+/* =====================================================
+   --- GERAL E PALETA DE CORES FINAL ---
+   Este bloco define as configurações globais do site, como a importação
+   de fontes externas e a criação de variáveis de cores (CSS Variables)
+   para serem reutilizadas em todo o projeto, facilitando a manutenção do tema.
+   ===================================================== */
+
+/* Importa as fontes 'Inter' e 'Montserrat' do serviço Google Fonts para serem usadas na página. */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
 
+/* O seletor :root se refere ao elemento raiz do documento (geralmente a tag <html>). */
+/* É o melhor lugar para declarar variáveis CSS globais. */
 :root {
+    /* Define a cor primária (amarelo/laranja) para destaques, como títulos e botões. */
     --cor-primaria: rgb(255, 175, 80); 
+    /* Define uma versão transparente da cor primária, usada para efeitos de hover. */
     --cor-primaria-transparente: rgba(255, 175, 80, 0.15);
+    /* Define a cor de fundo principal da página (preto suave). */
     --cor-fundo: #121212;
+    /* Define a cor de fundo para os cards, um pouco mais clara que o fundo principal. */
     --cor-card: #1e1e1e;
+    /* Define a cor para bordas, para criar separação sutil entre elementos. */
     --cor-borda: #3a3a3a;
+    /* Define a cor principal do texto (claro, para contrastar com o fundo escuro). */
     --cor-texto: #f5f5f5;
+    /* Define uma cor de texto secundária (cinza) para descrições e textos menos importantes. */
     --cor-texto-secundario: #a0a0a0;
 }
 
+/* Aplica estilos base para todo o corpo (<body>) do documento. */
 body {
+    /* Define a família de fontes principal para o texto do site. */
     font-family: 'Inter', sans-serif;
+    /* Aplica a cor de fundo definida na variável --cor-fundo. */
     background-color: var(--cor-fundo);
+    /* Aplica a cor de texto principal definida na variável --cor-texto. */
     color: var(--cor-texto);
+    /* Remove a margem padrão do navegador. */
     margin: 0;
+    /* Remove o preenchimento padrão do navegador. */
     padding: 0;
+    /* Melhora a renderização (suavização) das fontes em navegadores baseados em WebKit (Chrome, Safari). */
     -webkit-font-smoothing: antialiased;
 }
 
-/* --- CABEÇALHO --- */
+
+/* =====================================================
+   --- CABEÇALHO (HEADER) ---
+   Este bloco estiliza a seção do cabeçalho da página, onde
+   o título principal "Hamburgrr" está localizado.
+   ===================================================== */
+
+/* Estiliza o elemento <header>. */
 header {
+    /* Define a cor de fundo do cabeçalho como preto puro. */
     background-color: #000;
+    /* Adiciona um preenchimento interno de 15 pixels. */
     padding: 15px;
+    /* Centraliza o conteúdo do cabeçalho. */
     text-align: center;
+    /* Adiciona uma linha sutil na parte inferior do cabeçalho. */
     border-bottom: 1px solid var(--cor-borda);
 }
 
+/* Estiliza o título principal <h1> dentro do <header>. */
 header h1 {
+    /* Define uma fonte mais estilizada para o título. */
     font-family: 'Montserrat', sans-serif;
+    /* Usa a cor primária amarela para o texto do título. */
     color: var(--cor-primaria);
+    /* Remove a margem padrão do h1. */
     margin: 0;
+    /* Define o tamanho da fonte do título. */
     font-size: 2rem;
 }
 
-/* --- SEÇÃO HERO --- */
+
+/* =====================================================
+   --- SEÇÃO HERO (LOGO E SLOGAN) ---
+   Estiliza a área de destaque abaixo do cabeçalho, que
+   contém a logo e o slogan da hamburgueria.
+   ===================================================== */
+
+/* Estiliza a seção com o id #hero-section. */
 #hero-section {
+    /* Centraliza todo o conteúdo dentro da seção. */
     text-align: center;
+    /* Adiciona um preenchimento vertical de 40px e horizontal de 20px. */
     padding: 40px 20px;
 }
 
+/* Estiliza a imagem com a classe .logo. */
 .logo {
+    /* Define a largura máxima da imagem da logo. */
     max-width: 100px;
+    /* Adiciona um espaçamento abaixo da logo. */
     margin-bottom: 15px;
+    /* Deixa a imagem da logo perfeitamente redonda. */
     border-radius: 50%;
 }
 
+/* Estiliza o subtítulo <h2> dentro da #hero-section. */
 #hero-section h2 {
+    /* Define a fonte do slogan. */
     font-family: 'Montserrat', sans-serif;
+    /* Usa a cor de texto secundária (cinza) para o slogan. */
     color: var(--cor-texto-secundario);
+    /* Define o tamanho da fonte do slogan. */
     font-size: 1.3rem;
+    /* Remove a margem padrão do h2. */
     margin: 0;
+    /* Define um peso de fonte mais leve que o padrão de um h2. */
     font-weight: 400;
 }
 
-/* --- ESTRUTURA PRINCIPAL E ABAS --- */
+
+/* =====================================================
+   --- ESTRUTURA PRINCIPAL E ABAS (TABS) ---
+   Este bloco define o layout da área principal do conteúdo,
+   incluindo o sistema de navegação por abas que filtra as
+   categorias do cardápio.
+   ===================================================== */
+
+/* Estiliza o elemento <main>, que contém o conteúdo principal. */
 main {
+    /* Adiciona um preenchimento interno de 20 pixels. */
     padding: 20px;
+    /* Define uma largura máxima para o conteúdo, evitando que ele fique muito largo em telas grandes. */
     max-width: 1200px;
+    /* Centraliza o container <main> na página. */
     margin: 0 auto;
 }
 
+/* Estiliza o container de navegação das abas (<nav> com id .tabs-nav). */
 .tabs-nav {
+    /* Usa Flexbox para alinhar os botões das abas em uma linha. */
     display: flex;
+    /* Permite que as abas quebrem para a próxima linha em telas pequenas. */
     flex-wrap: wrap;
+    /* Adiciona um espaçamento de 10px entre os botões das abas. */
     gap: 10px;
+    /* Adiciona uma linha divisória abaixo das abas. */
     border-bottom: 1px solid var(--cor-borda);
+    /* Adiciona um espaçamento abaixo da barra de abas. */
     margin-bottom: 30px;
 }
 
+/* Estiliza cada botão de aba individual. */
 .tab-button {
+    /* Define a fonte para os botões. */
     font-family: 'Montserrat', sans-serif;
+    /* Adiciona preenchimento interno para aumentar a área clicável. */
     padding: 10px 20px;
+    /* Remove a borda padrão dos botões. */
     border: none;
+    /* Deixa o fundo do botão transparente. */
     background-color: transparent;
+    /* Muda o cursor para uma "mãozinha" para indicar que é clicável. */
     cursor: pointer;
+    /* Define o tamanho da fonte. */
     font-size: 1rem;
+    /* Define o peso da fonte (negrito). */
     font-weight: 700;
+    /* Define a cor do texto para o estado inativo (cinza). */
     color: var(--cor-texto-secundario);
+    /* Adiciona uma borda inferior transparente para manter o alinhamento quando a aba ativa for mostrada. */
     border-bottom: 3px solid transparent;
+    /* Adiciona uma transição suave para todas as propriedades que mudarem (ex: cor, fundo). */
     transition: all 0.2s ease-in-out;
 }
 
+/* Estiliza o botão da aba quando o mouse está sobre ele (hover). */
 .tab-button:hover {
+    /* Muda a cor do texto para branco. */
     color: var(--cor-texto);
+    /* Adiciona um fundo amarelo transparente. */
     background-color: var(--cor-primaria-transparente);
 }
 
+/* Estiliza o botão da aba que está atualmente ativa (com a classe .active). */
 .tab-button.active {
+    /* Muda a cor do texto para o amarelo primário. */
     color: var(--cor-primaria);
+    /* Mostra a borda inferior com a cor primária, indicando a seleção. */
     border-bottom-color: var(--cor-primaria);
 }
 
+/* Estiliza o container de conteúdo das abas. */
 #tabs-content {
+    /* Aplica uma animação de fade-in ao conteúdo quando ele aparece. */
     animation: fadeIn 0.5s ease;
 }
 
+/* Define a animação 'fadeIn'. */
 @keyframes fadeIn {
+    /* O estado inicial da animação: totalmente transparente. */
     from { opacity: 0; }
+    /* O estado final da animação: totalmente opaco. */
     to { opacity: 1; }
 }
 
-/* --- GRID E CARDS (TEMA ESCURO) --- */
+
+/* =====================================================
+   --- GRID E CARDS (TEMA ESCURO) ---
+   Este bloco define o layout em grade para os itens do menu
+   e o estilo visual de cada card individual.
+   ===================================================== */
+
+/* Estiliza o container que organiza os cards em uma grade. */
 .menu-grid {
+    /* Define o layout como uma grade. */
     display: grid;
+    /* Cria colunas responsivas: cada coluna terá no mínimo 250px. O navegador ajusta o número de colunas automaticamente. */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    /* Define o espaçamento entre os cards na grade. */
     gap: 25px;
 }
 
+/* Estiliza cada card individual do menu. */
 .menu-card {
+    /* Define a cor de fundo do card. */
     background-color: var(--cor-card);
+    /* Adiciona cantos arredondados ao card. */
     border-radius: 12px;
+    /* Garante que a imagem não "vaze" para fora dos cantos arredondados. */
     overflow: hidden;
+    /* Muda o cursor para uma "mãozinha" para indicar que o card é clicável. */
     cursor: pointer;
+    /* Adiciona uma borda sutil ao redor do card. */
     border: 1px solid var(--cor-borda);
+    /* Adiciona uma transição suave para as propriedades de transformação e cor da borda. */
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
+/* Estiliza o card quando o mouse está sobre ele (hover). */
 .menu-card:hover {
+    /* Move o card 5 pixels para cima para criar um efeito de "flutuação". */
     transform: translateY(-5px);
+    /* Muda a cor da borda para o amarelo primário. */
     border-color: var(--cor-primaria);
 }
 
+/* Estiliza a imagem dentro do card. */
 .menu-card img {
+    /* Faz a imagem ocupar 100% da largura do card. */
     width: 100%;
+    /* Define uma altura fixa para a imagem. */
     height: 160px;
+    /* Garante que a imagem cubra toda a área designada sem distorcer, cortando o excesso se necessário. */
     object-fit: cover;
 }
 
+/* Estiliza a área de conteúdo (texto) dentro do card. */
 .card-content {
+    /* Adiciona um preenchimento interno de 15px. */
     padding: 15px;
 }
 
+/* Estiliza o título (<h3>) do item no card. */
 .card-content h3 {
+    /* Remove as margens padrão e adiciona um pequeno espaçamento inferior. */
     margin: 0 0 8px 0;
+    /* Define a fonte do título do card. */
     font-family: 'Montserrat', sans-serif;
+    /* Define o tamanho da fonte. */
     font-size: 1.2rem;
+    /* Define a cor do texto. */
     color: var(--cor-texto);
 }
 
+/* Estiliza a descrição (<p>) do item no card. */
 .card-content .descricao {
+    /* Define o tamanho da fonte para a descrição. */
     font-size: 0.85rem;
+    /* Usa a cor de texto secundária (cinza). */
     color: var(--cor-texto-secundario);
+    /* Garante que todos os cards tenham uma altura mínima de descrição, para alinhamento visual. */
     min-height: 45px;
+    /* Define a altura da linha para melhor legibilidade. */
     line-height: 1.5;
 }
 
+/* Estiliza o preço (<p>) do item no card. */
 .card-content .preco {
+    /* Define o tamanho da fonte do preço. */
     font-size: 1.3rem;
+    /* Deixa o texto do preço em negrito. */
     font-weight: bold;
+    /* Alinha o preço à direita do card. */
     text-align: right;
+    /* Adiciona um espaçamento acima do preço. */
     margin-top: 10px;
+    /* Usa a cor primária (amarelo) para destacar o preço. */
     color: var(--cor-primaria);
 }
 
+
 /* =====================================================
---- ESTILO DO MODAL (TEMA ESCURO) ---
-===================================================== */
+   --- ESTILO DO MODAL (POP-UP) ---
+   Este bloco controla a aparência do modal (pop-up) que
+   aparece quando um item do menu é clicado. Inclui o fundo
+   escurecido (overlay) e o conteúdo da janela do modal.
+   ===================================================== */
+
+/* Estiliza o container principal do modal. */
 .modal {
+    /* Por padrão, o modal fica escondido. O JavaScript muda para 'flex' para exibi-lo. */
     display: none;
+    /* Tira o modal do fluxo normal do documento e o fixa na tela. */
     position: fixed;
+    /* Garante que o modal fique acima de todos os outros elementos da página. */
     z-index: 1000;
+    /* Posiciona o modal no canto superior esquerdo da tela. */
     left: 0;
     top: 0;
+    /* Faz o modal ocupar toda a largura da tela. */
     width: 100%;
+    /* Faz o modal ocupar toda a altura da tela. */
     height: 100%;
+    /* Usa Flexbox para centralizar seu conteúdo filho (o .modal-content). */
     justify-content: center;
     align-items: center;
+    /* Define o fundo escurecido (overlay) com transparência. */
     background-color: rgba(0, 0, 0, 0.75);
+    /* Aplica a animação de fade-in ao overlay. */
     animation: fadeIn 0.3s ease;
 }
 
+/* Estiliza a janela de conteúdo do modal. */
 .modal-content {
+    /* Define a cor de fundo do modal. */
     background-color: #1e1e1e;
+    /* Define a cor do texto dentro do modal. */
     color: #f5f5f5;
+    /* Adiciona uma borda sutil ao modal. */
     border: 1px solid #3a3a3a;
+    /* Adiciona cantos arredondados. */
     border-radius: 10px;
+    /* Aplica uma animação de "deslizar para baixo" quando o modal aparece. */
     animation: slide-down 0.5s ease;
+    /* Define a largura do modal para 90% da tela em dispositivos pequenos. */
     width: 90%;
+    /* Define uma largura máxima para o modal em telas grandes. */
     max-width: 500px;
 }
 
+/* Define a animação 'slide-down'. */
 @keyframes slide-down {
+    /* O estado inicial: 30 pixels acima e transparente. */
     from {
         transform: translateY(-30px);
         opacity: 0;
     }
+    /* O estado final: na posição normal e totalmente opaco. */
     to {
         transform: translateY(0);
         opacity: 1;
     }
 }
 
+/* Estiliza a área de conteúdo interno do modal. */
 .modal-body {
+    /* Adiciona um preenchimento interno generoso. */
     padding: 30px;
 }
 
+/* Estiliza o título (<h3>) dentro do modal. */
 .modal-body h3 {
+    /* Define a fonte do título. */
     font-family: 'Montserrat', sans-serif;
+    /* Define o tamanho da fonte. */
     font-size: 2rem;
+    /* Usa a cor primária para o título. */
     color: var(--cor-primaria);
+    /* Remove a margem superior do título. */
     margin-top: 0;
 }
 
+/* Estiliza o botão de fechar (o "X"). */
 .close-button {
+    /* Posiciona o botão de forma absoluta em relação ao .modal-content (que precisa ter position: relative). */
     position: absolute;
+    /* Posiciona 15px a partir do topo. */
     top: 15px;
+    /* Posiciona 20px a partir da direita. */
     right: 20px;
+    /* Define a cor do "X". */
     color: #aaa;
+    /* Define o tamanho do "X". */
     font-size: 28px;
+    /* Deixa o "X" em negrito. */
     font-weight: bold;
+    /* Muda o cursor para "mãozinha". */
     cursor: pointer;
+    /* Adiciona uma transição suave para a cor. */
     transition: color 0.2s ease;
 }
 
+/* Estiliza o botão de fechar quando o mouse está sobre ele. */
 .close-button:hover {
+    /* Muda a cor do "X" para a cor primária. */
     color: var(--cor-primaria);
 }
 
+/* Estiliza a seção de opções de combo dentro do modal. */
 #combo-options {
+    /* Adiciona um espaçamento acima da seção. */
     margin-top: 20px;
+    /* Adiciona preenchimento interno. */
     padding: 15px;
+    /* Define uma cor de fundo para destacar a seção. */
     background-color: #2a2a2a;
+    /* Adiciona cantos arredondados. */
     border-radius: 8px;
 }
 
+/* Estiliza os rótulos (<label>) tanto das opções de combo quanto das observações. */
 #combo-options label, .observacoes label {
+    /* Faz o rótulo ocupar toda a largura, ficando acima do input. */
     display: block;
+    /* Adiciona espaçamento abaixo do rótulo. */
     margin-bottom: 10px;
+    /* Deixa o texto do rótulo em negrito. */
     font-weight: bold;
+    /* Define o tamanho da fonte do rótulo. */
     font-size: 0.9rem;
+    /* Define a cor do texto. */
     color: #f5f5f5;
 }
 
+/* Estiliza tanto o seletor (<select>) quanto a área de texto (<textarea>) no modal. */
 #combo-options select, textarea {
+    /* Faz o campo ocupar 100% da largura disponível. */
     width: 100%;
+    /* Adiciona preenchimento interno para o texto. */
     padding: 12px;
+    /* Adiciona cantos arredondados. */
     border-radius: 5px;
+    /* Define a cor de fundo dos campos. */
     background-color: #121212;
+    /* Define a cor do texto digitado. */
     color: #f5f5f5;
+    /* Adiciona uma borda sutil. */
     border: 1px solid #3a3a3a;
+    /* Define o tamanho da fonte do texto digitado. */
     font-size: 1rem;
+    /* Garante que a fonte seja a mesma do resto do corpo. */
     font-family: 'Inter', sans-serif;
 }
 
+/* Estiliza o texto de placeholder especificamente da <textarea>. */
 textarea::placeholder {
+    /* Define uma cor cinza para o placeholder, para que seja visível no fundo escuro. */
     color: #888;
 }
 
+/* Estiliza o botão principal dentro do modal. */
 .modal-body button {
+    /* Define a cor de fundo usando a cor primária. */
     background-color: var(--cor-primaria);
+    /* Define a cor do texto do botão (escuro, para contrastar com o fundo amarelo). */
     color: #121212;
+    /* Deixa o texto do botão em negrito. */
     font-weight: 700;
+    /* Remove a borda padrão. */
     border: none;
+    /* Adiciona preenchimento interno. */
     padding: 15px 20px;
+    /* Define o tamanho da fonte. */
     font-size: 1.1rem;
+    /* Adiciona cantos arredondados. */
     border-radius: 5px;
+    /* Muda o cursor para "mãozinha". */
     cursor: pointer;
+    /* Faz o botão ocupar 100% da largura. */
     width: 100%;
+    /* Adiciona um espaçamento acima do botão. */
     margin-top: 20px;
+    /* Adiciona uma transição suave para a cor de fundo. */
     transition: background-color 0.3s ease;
 }
 
+/* Estiliza o botão do modal quando o mouse está sobre ele. */
 .modal-body button:hover {
+    /* Deixa a cor de fundo do botão um pouco mais clara. */
     background-color: rgb(255, 190, 110);
 }
 
+
 /* =====================================================
---- ESTILOS PARA O FOOTER E MAPA ---
-===================================================== */
+   --- ESTILOS PARA O RODAPÉ (FOOTER) E MAPA ---
+   Este bloco estiliza a seção final da página, o rodapé,
+   que contém o mapa interativo e as informações de endereço.
+   ===================================================== */
+
+/* Estiliza o elemento <footer>. */
 .site-footer {
+    /* Define a cor de fundo do rodapé. */
     background-color: #000;
+    /* Define a cor do texto. */
     color: var(--cor-texto-secundario);
+    /* Adiciona preenchimento interno. */
     padding: 40px 20px;
+    /* Adiciona um espaçamento acima do rodapé. */
     margin-top: 40px;
+    /* Adiciona uma linha divisória no topo do rodapé. */
     border-top: 1px solid var(--cor-borda);
+    /* Centraliza o conteúdo. */
     text-align: center;
 }
 
+/* Estiliza o container do mapa (<div> com id #map). */
 #map {
+    /* Define uma altura fixa para o mapa. Sem isso, ele não apareceria. */
     height: 350px;
+    /* Faz o mapa ocupar 100% da largura do seu container. */
     width: 100%;
+    /* Adiciona cantos arredondados ao mapa. */
     border-radius: 12px;
+    /* Adiciona uma borda sutil ao redor do mapa. */
     border: 1px solid var(--cor-borda);
+    /* Adiciona um espaçamento abaixo do mapa. */
     margin-bottom: 20px;
 }
 
+/* Estiliza o container interno da biblioteca Leaflet. */
 .leaflet-container {
+    /* Aplica um filtro para diminuir um pouco o brilho e aumentar o contraste, integrando melhor ao tema escuro. */
     filter: brightness(0.9) contrast(1.1);
 }
 
+/* Estiliza o título dentro do container de endereço. */
 .address-container h3 {
+    /* Define a fonte do título. */
     font-family: 'Montserrat', sans-serif;
+    /* Usa a cor primária. */
     color: var(--cor-primaria);
+    /* Define o tamanho da fonte. */
     font-size: 1.5rem;
+    /* Remove a margem e adiciona um espaçamento inferior. */
     margin: 0 0 10px 0;
 }
 
+/* Estiliza o parágrafo do endereço. */
 .address-container p {
+    /* Define o tamanho da fonte. */
     font-size: 1rem;
+    /* Aumenta a altura da linha para melhor legibilidade. */
     line-height: 1.6;
+    /* Remove a margem padrão. */
     margin: 0;
 }
