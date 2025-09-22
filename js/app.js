@@ -4,6 +4,7 @@ import { menuData } from './data/menu.js';
 import { createTabs, renderCategory } from './modules/ui.js';
 import { initializeModal } from './modules/modal.js';
 import { initializeMap } from './modules/map.js';
+import { initializeAuth } from './modules/auth.js'; // Importa a função de autenticação
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFERÊNCIAS AOS ELEMENTOS PRINCIPAIS DO DOM ---
@@ -12,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INICIALIZAÇÃO DOS MÓDULOS ---
 
-    // 1. Inicializa o UI do menu
+    // 1. Inicializa a UI do menu
     createTabs(menuData, tabsNavigation);
 
     // 2. Inicializa o Modal e obtém a função para abri-lo
@@ -21,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Inicializa o Mapa com coordenadas exatas
     const mapCoordinates = [-7.09338141728057, -34.85038717117099];
     initializeMap(mapCoordinates);
+
+    // 4. Inicializa a autenticação
+    initializeAuth();
 
     // --- EVENT LISTENERS PRINCIPAIS ---
 

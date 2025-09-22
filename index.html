@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=scale=1.0">
     <title>Cardápio da Hamburgueria</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -13,6 +13,10 @@
 
     <header>
         <h1>Hamburguer</h1>
+        <div class="auth-buttons">
+            <button id="open-login" class="auth-btn">Login</button>
+            <button id="open-register" class="auth-btn">Cadastro</button>
+        </div>
     </header>
     
     <section id="hero-section">
@@ -32,8 +36,9 @@
             <div class="modal-body">
                 <h3 id="modal-title">Nome do Item</h3>
                 <p id="modal-description">Descrição completa do item.</p>
-                <p id="modal-price" class="preco">R$ 00,00</p>
                 
+                <div id="modal-adicionais"></div>
+
                 <div id="combo-options" style="display: none;">
                     <label for="refrigerante-select">Escolha sua bebida:</label>
                     <select id="refrigerante-select"></select>
@@ -44,7 +49,55 @@
                     <textarea id="observacoes-input" rows="3" placeholder="Ex: Sem cebola, ponto da carne mal passado..."></textarea>
                 </div>
 
+                <p id="total-price" class="preco">Total: R$ 00,00</p>
+
                 <button>Adicionar ao Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3>Login</h3>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit">Entrar</button>
+                </form>
+                <p class="switch-form">Não tem uma conta? <a href="#" id="switchToRegister">Cadastre-se</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3>Criar Conta</h3>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-name">Nome</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Senha</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <button type="submit">Cadastrar</button>
+                </form>
+                <p class="switch-form">Já tem uma conta? <a href="#" id="switchToLogin">Faça login</a></p>
             </div>
         </div>
     </div>

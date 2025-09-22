@@ -14,7 +14,13 @@ const menuData = {
         queijos: ["Cheddar"],
         outros: ["Bacon crocante"],
         molhos: []
-      }
+      },
+      adicionais: [
+        { nome: "Carne Extra (90g)", preco: 8.00 },
+        { nome: "Queijo Cheddar Extra", preco: 4.00 },
+        { nome: "Bacon Extra", preco: 5.00 },
+        { nome: "Cebola Caramelizada", preco: 3.00 }
+      ]
     },
     {
       id: 2,
@@ -28,7 +34,12 @@ const menuData = {
         queijos: ["Gorgonzola cremoso"],
         outros: [],
         molhos: []
-      }
+      },
+      adicionais: [
+        { nome: "Carne Extra (160g)", preco: 10.00 },
+        { nome: "Queijo Gorgonzola Extra", preco: 6.00 },
+        { nome: "Bacon Crocante", preco: 5.00 }
+      ]
     }
   ],
   acompanhamentos: [
@@ -60,7 +71,7 @@ const menuData = {
     {
       id: 6,
       nome: "Refrigerantes (Lata 350ml)",
-      descricao: "Escolha entre Coca-Cola, Sprite ou Guaraná.", // Descrição adicionada
+      descricao: "Escolha entre Coca-Cola, Sprite ou Guaraná.",
       opcoes: ["Coca-Cola", "Sprite", "Guaraná"],
       preco: 6.00,
       imagem: "https://placehold.co/600x400/2c2c2c/ff9900?text=Refrigerantes"
@@ -72,14 +83,23 @@ const menuData = {
       nome: "Combo Cheeseburger Brioche",
       descricao: "Cheeseburger + fritas crocantes + refrigerante (lata 350ml).",
       preco: 42.00,
-      imagem: "https://placehold.co/600x400/2c2c2c/ff9900?text=Combo+Cheeseburger"
+      imagem: "https://placehold.co/600x400/2c2c2c/ff9900?text=Combo+Cheeseburger",
+      adicionais: [
+        { nome: "Bacon Extra no Hambúrguer", preco: 5.00 },
+        { nome: "Cheddar Extra no Hambúrguer", preco: 4.00 },
+        { nome: "Turbinar Fritas (Cheddar e Bacon)", preco: 8.00 }
+      ]
     },
     {
       id: 8,
       nome: "Combo Gorgon",
       descricao: "Hambúrguer Gorgon + fritas crocantes + refrigerante (lata 350ml).",
       preco: 44.00,
-      imagem: "https://placehold.co/600x400/2c2c2c/ff9900?text=Combo+Gorgon"
+      imagem: "https://placehold.co/600x400/2c2c2c/ff9900?text=Combo+Gorgon",
+      adicionais: [
+        { nome: "Bacon Crocante no Hambúrguer", preco: 5.00 },
+        { nome: "Turbinar Fritas (Cheddar e Bacon)", preco: 8.00 }
+      ]
     }
   ]
 };
