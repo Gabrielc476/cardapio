@@ -1,6 +1,8 @@
 // js/modules/modal.js
 
-let modalElement, modalTitle, modalDescription, comboOptionsDiv, refrigeranteSelect, observacoesInput, closeModalButton, modalAdicionais, totalPriceElement;
+import { addToCart } from './carrinho.js';
+
+let modalElement, modalTitle, modalDescription, comboOptionsDiv, refrigeranteSelect, observacoesInput, closeModalButton, modalAdicionais, totalPriceElement, addToCartBtn;
 
 let currentItemPrice = 0;
 let adicionaisPrice = 0;
@@ -69,7 +71,6 @@ function renderAdicionais(adicionais) {
     });
 }
 
-
 /**
  * Abre e popula o modal com os dados de um item.
  * @param {object} item - O objeto do item clicado.
@@ -82,7 +83,6 @@ function openModal(item, categoriaKey, menuData) {
     observacoesInput.value = '';
     currentItemPrice = item.preco;
 
-    // Renderiza os adicionais
     renderAdicionais(item.adicionais);
 
     if (categoriaKey === 'combos') {
@@ -99,7 +99,9 @@ function openModal(item, categoriaKey, menuData) {
         comboOptionsDiv.style.display = 'none';
     }
     
-    updateTotalPrice(); // Atualiza o preço inicial
+    addToCartBtn.currentItem = item;
+    
+    updateTotalPrice();
     modalElement.style.display = 'flex';
 }
 
@@ -113,7 +115,7 @@ function closeModal() {
  */
 export function initializeModal() {
     modalElement = document.getElementById('itemModal');
-    closeModalButton = document.querySelector('.close-button');
+    closeModalButton = document.querySelector('#itemModal .close-button');
     modalTitle = document.getElementById('modal-title');
     modalDescription = document.getElementById('modal-description');
     comboOptionsDiv = document.getElementById('combo-options');
@@ -121,7 +123,23 @@ export function initializeModal() {
     observacoesInput = document.getElementById('observacoes-input');
     modalAdicionais = document.getElementById('modal-adicionais');
     totalPriceElement = document.getElementById('total-price');
+    addToCartBtn = document.querySelector('#itemModal button');
     
+    addToCartBtn.addEventListener('click', () => {
+        const item = addToCartBtn.currentItem;
+        if (!item) return;
+
+        const itemParaCarrinho = {
+            id: item.id,
+            name: item.nome,
+            quantity: 1,
+            price: currentItemPrice + adicionaisPrice
+        };
+        
+        addToCart(itemParaCarrinho);
+        closeModal();
+    });
+
     closeModalButton.addEventListener('click', closeModal);
     window.addEventListener('click', (event) => {
         if (event.target === modalElement) {

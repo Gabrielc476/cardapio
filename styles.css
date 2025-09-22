@@ -2,59 +2,35 @@
  * @file styles.css
  * @author Gabriel Castro (comentado por Gemini)
  * @brief Folha de estilos principal para a aplicação de cardápio.
- * Define a aparência geral, layout, cores e responsividade.
  */
 
 /* =====================================================
-   --- GERAL E PALETA DE CORES FINAL ---
-   Este bloco define as configurações globais do site, como a importação
-   de fontes externas e a criação de variáveis de cores (CSS Variables)
-   para serem reutilizadas em todo o projeto, facilitando a manutenção do tema.
+   --- GERAL E PALETA DE CORES ---
    ===================================================== */
-
-/* Importa as fontes 'Inter' e 'Montserrat' do serviço Google Fonts para serem usadas na página. */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
 
-/* O seletor :root se refere ao elemento raiz do documento (geralmente a tag <html>). */
-/* É o melhor lugar para declarar variáveis CSS globais. */
 :root {
-    /* Define a cor primária (amarelo/laranja) para destaques, como títulos e botões. */
     --cor-primaria: rgb(255, 175, 80); 
-    /* Define uma versão transparente da cor primária, usada para efeitos de hover. */
     --cor-primaria-transparente: rgba(255, 175, 80, 0.15);
-    /* Define a cor de fundo principal da página (preto suave). */
     --cor-fundo: #121212;
-    /* Define a cor de fundo para os cards, um pouco mais clara que o fundo principal. */
     --cor-card: #1e1e1e;
-    /* Define a cor para bordas, para criar separação sutil entre elementos. */
     --cor-borda: #3a3a3a;
-    /* Define a cor principal do texto (claro, para contrastar com o fundo escuro). */
     --cor-texto: #f5f5f5;
-    /* Define uma cor de texto secundária (cinza) para descrições e textos menos importantes. */
     --cor-texto-secundario: #a0a0a0;
 }
 
-/* Aplica estilos base para todo o corpo (<body>) do documento. */
 body {
-    /* Define a família de fontes principal para o texto do site. */
     font-family: 'Inter', sans-serif;
-    /* Aplica a cor de fundo definida na variável --cor-fundo. */
     background-color: var(--cor-fundo);
-    /* Aplica a cor de texto principal definida na variável --cor-texto. */
     color: var(--cor-texto);
-    /* Remove a margem padrão do navegador. */
     margin: 0;
-    /* Remove o preenchimento padrão do navegador. */
     padding: 0;
-    /* Melhora a renderização (suavização) das fontes em navegadores baseados em WebKit (Chrome, Safari). */
     -webkit-font-smoothing: antialiased;
 }
-
 
 /* =====================================================
    --- CABEÇALHO (HEADER) ---
    ===================================================== */
-
 header {
     background-color: #000;
     padding: 15px 30px;
@@ -94,13 +70,9 @@ header h1 {
     color: var(--cor-texto);
 }
 
-
 /* =====================================================
-   --- SEÇÃO HERO (LOGO E SLOGAN) ---
-   Estiliza a área de destaque abaixo do cabeçalho, que
-   contém a logo e o slogan da hamburgueria.
+   --- SEÇÃO HERO ---
    ===================================================== */
-
 #hero-section {
     text-align: center;
     padding: 40px 20px;
@@ -120,11 +92,9 @@ header h1 {
     font-weight: 400;
 }
 
-
 /* =====================================================
-   --- ESTRUTURA PRINCIPAL E ABAS (TABS) ---
+   --- ESTRUTURA PRINCIPAL E ABAS ---
    ===================================================== */
-
 main {
     padding: 20px;
     max-width: 1200px;
@@ -171,11 +141,9 @@ main {
     to { opacity: 1; }
 }
 
-
 /* =====================================================
-   --- GRID E CARDS (TEMA ESCURO) ---
+   --- GRID E CARDS ---
    ===================================================== */
-
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
@@ -228,11 +196,9 @@ main {
     color: var(--cor-primaria);
 }
 
-
 /* =====================================================
-   --- ESTILO DO MODAL (POP-UP) ---
+   --- ESTILO DO MODAL ---
    ===================================================== */
-
 .modal {
     display: none;
     position: fixed;
@@ -256,10 +222,9 @@ main {
     width: 90%;
     max-width: 500px;
     position: relative;
-    /* --- ALTERAÇÕES AQUI --- */
-    max-height: 70vh; /* Define a altura máxima como 70% da altura da tela */
-    display: flex; /* Adiciona flex para controlar o layout interno */
-    flex-direction: column; /* Organiza os elementos filhos em coluna */
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes slide-down {
@@ -275,8 +240,7 @@ main {
 
 .modal-body {
     padding: 30px;
-    /* --- ALTERAÇÃO AQUI --- */
-    overflow-y: auto; /* Adiciona rolagem vertical se o conteúdo transbordar */
+    overflow-y: auto;
 }
 
 .modal-body h3 {
@@ -350,6 +314,7 @@ textarea::placeholder {
     background-color: rgb(255, 190, 110);
 }
 
+/* --- Formulários de Autenticação --- */
 .form-group {
     margin-bottom: 20px;
 }
@@ -391,6 +356,7 @@ textarea::placeholder {
     text-decoration: underline;
 }
 
+/* --- Adicionais no Modal --- */
 #total-price {
     font-size: 1.5rem;
     font-weight: bold;
@@ -464,11 +430,73 @@ textarea::placeholder {
     text-align: center;
 }
 
+/* =====================================================
+   --- ESTILOS DO CARRINHO ---
+   ===================================================== */
+.cart-btn {
+    font-size: 1.5rem;
+    padding: 5px 15px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5px;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-name {
+    font-weight: bold;
+}
+
+.cart-item-price {
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.remove-btn {
+    background: none;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+    background-color: #c0392b;
+    color: var(--cor-texto);
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--cor-texto-secundario);
+}
+
+#cart-footer {
+    border-top: 1px solid var(--cor-borda);
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+#cart-total-price {
+    text-align: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+    margin-bottom: 20px;
+}
 
 /* =====================================================
-   --- ESTILOS PARA O RODAPÉ (FOOTER) E MAPA ---
+   --- RODAPÉ E MAPA ---
    ===================================================== */
-
 .site-footer {
     background-color: #000;
     color: var(--cor-texto-secundario);

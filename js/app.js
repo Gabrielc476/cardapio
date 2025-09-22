@@ -4,7 +4,8 @@ import { menuData } from './data/menu.js';
 import { createTabs, renderCategory } from './modules/ui.js';
 import { initializeModal } from './modules/modal.js';
 import { initializeMap } from './modules/map.js';
-import { initializeAuth } from './modules/auth.js'; // Importa a função de autenticação
+import { initializeAuth } from './modules/auth.js';
+import { initializeCart } from './modules/carrinho.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFERÊNCIAS AOS ELEMENTOS PRINCIPAIS DO DOM ---
@@ -16,15 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Inicializa a UI do menu
     createTabs(menuData, tabsNavigation);
 
-    // 2. Inicializa o Modal e obtém a função para abri-lo
+    // 2. Inicializa o Modal de Itens e obtém a função para abri-lo
     const openModal = initializeModal();
 
-    // 3. Inicializa o Mapa com coordenadas exatas
+    // 3. Inicializa o Mapa com um pequeno delay para garantir a renderização correta
     const mapCoordinates = [-7.09338141728057, -34.85038717117099];
-    initializeMap(mapCoordinates);
+    setTimeout(() => {
+        initializeMap(mapCoordinates);
+    }, 100); // Um atraso de 100 milissegundos é o suficiente
 
-    // 4. Inicializa a autenticação
+    // 4. Inicializa os modais de autenticação
     initializeAuth();
+
+    // 5. Inicializa o carrinho
+    initializeCart();
 
     // --- EVENT LISTENERS PRINCIPAIS ---
 
@@ -35,12 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            // Usa a função do módulo de UI para renderizar a categoria
             renderCategory(categoriaKey, menuData, tabsContent);
         }
     });
 
-    // Listener para o clique nos cards para ABRIR o modal
+    // Listener para o clique nos cards para ABRIR o modal de item
     tabsContent.addEventListener('click', (event) => {
         const card = event.target.closest('.menu-card');
         if (card) {
@@ -48,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemId = parseInt(card.dataset.id);
             const item = menuData[categoriaKey].find(i => i.id === itemId);
             
-            // Usa a função retornada pelo módulo do modal para abri-lo
             openModal(item, categoriaKey, menuData);
         }
     });

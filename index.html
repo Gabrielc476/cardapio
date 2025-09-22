@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardápio da Hamburgueria</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -16,6 +16,7 @@
         <div class="auth-buttons">
             <button id="open-login" class="auth-btn">Login</button>
             <button id="open-register" class="auth-btn">Cadastro</button>
+            <button id="open-cart-btn" class="auth-btn cart-btn">🛒</button>
         </div>
     </header>
     
@@ -98,6 +99,21 @@
                     <button type="submit">Cadastrar</button>
                 </form>
                 <p class="switch-form">Já tem uma conta? <a href="#" id="switchToLogin">Faça login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3>Meu Carrinho</h3>
+                <div id="cart-items-container">
+                    </div>
+                <div id="cart-footer">
+                    <p id="cart-total-price" class="preco">Total: R$ 0,00</p>
+                    <button>Finalizar Pedido</button>
+                </div>
             </div>
         </div>
     </div>
