@@ -8,6 +8,7 @@ export function initializeAuth() {
     const closeButtons = document.querySelectorAll('.modal .close-button');
     const switchToRegister = document.getElementById('switchToRegister');
     const switchToLogin = document.getElementById('switchToLogin');
+    const userIcon = document.getElementById('user-icon');
 
     function openModal(modal) {
         modal.style.display = 'flex';
@@ -15,6 +16,12 @@ export function initializeAuth() {
 
     function closeModal(modal) {
         modal.style.display = 'none';
+    }
+
+    function showUserIcon() {
+        openLoginBtn.style.display = 'none';
+        openRegisterBtn.style.display = 'none';
+        userIcon.style.display = 'inline-block'; // ou 'flex'
     }
 
     openLoginBtn.addEventListener('click', () => openModal(loginModal));
@@ -53,11 +60,15 @@ export function initializeAuth() {
 
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        // Aqui você adicionaria a lógica de autenticação real
         closeModal(loginModal);
+        showUserIcon(); // Mostra o ícone do usuário
     });
 
     registerForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        // Aqui você adicionaria a lógica de registro real
         closeModal(registerModal);
+        showUserIcon(); // Mostra o ícone do usuário
     });
 }

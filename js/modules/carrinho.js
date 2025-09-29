@@ -80,6 +80,7 @@ export function initializeCart() {
     closeCartBtn = document.querySelector('#cartModal .close-button');
     cartItemsContainer = document.getElementById('cart-items-container');
     cartTotalPriceEl = document.getElementById('cart-total-price');
+    const finalizeOrderBtn = document.querySelector('#cart-footer button'); // Pega o botão de finalizar
 
     openCartBtn.addEventListener('click', openCartModal);
     closeCartBtn.addEventListener('click', closeCartModal);
@@ -96,6 +97,22 @@ export function initializeCart() {
             const index = parseInt(event.target.dataset.index, 10);
             removeFromCart(index);
         }
+    });
+
+    // Listener para o botão de finalizar pedido
+    finalizeOrderBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            alert('Seu carrinho está vazio!');
+            return;
+        }
+
+        const totalPriceText = cartTotalPriceEl.textContent;
+        alert(`Pedido finalizado!\n${totalPriceText}`);
+
+        // Limpa o carrinho
+        cart = [];
+        renderCart();
+        closeCartModal();
     });
 
     // Renderiza o carrinho inicialmente (para mostrar a mensagem de vazio)
