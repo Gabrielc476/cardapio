@@ -1,16 +1,19 @@
 /**
  * @file styles.css
- * @author Gabriel Castro (comentado por Gemini)
+ * @author Gabriel Castro (editado e comentado por Gemini)
  * @brief Folha de estilos principal para a aplicação de cardápio.
+ * Define a aparência geral, layout, cores e responsividade.
  */
 
 /* =====================================================
-   --- GERAL E PALETA DE CORES ---
+   --- GERAL, RESET E PALETA DE CORES ---
    ===================================================== */
+/* Importa as fontes 'Inter' e 'Montserrat' do serviço Google Fonts. */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
 
+/* Variáveis CSS Globais */
 :root {
-    --cor-primaria: rgb(255, 175, 80); 
+    --cor-primaria: rgb(255, 175, 80);
     --cor-primaria-transparente: rgba(255, 175, 80, 0.15);
     --cor-fundo: #121212;
     --cor-card: #1e1e1e;
@@ -19,13 +22,21 @@
     --cor-texto-secundario: #a0a0a0;
 }
 
+/* Reset e Padrões Globais */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--cor-fundo);
     color: var(--cor-texto);
-    margin: 0;
-    padding: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* =====================================================
@@ -38,12 +49,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Para melhor responsividade */
+    gap: 15px;      /* Espaçamento se os itens quebrarem a linha */
 }
 
 header h1 {
     font-family: 'Montserrat', sans-serif;
     color: var(--cor-primaria);
-    margin: 0;
     font-size: 2rem;
 }
 
@@ -66,8 +78,8 @@ header h1 {
 }
 
 .auth-btn:hover {
-    background-color: var(--cor-primaria-transparente);
-    color: var(--cor-texto);
+    background-color: var(--cor-primaria);
+    color: var(--cor-fundo);
 }
 
 /* =====================================================
@@ -79,7 +91,7 @@ header h1 {
 }
 
 .logo {
-    max-width: 100px;
+    max-width: 200px;
     margin-bottom: 15px;
     border-radius: 50%;
 }
@@ -88,7 +100,6 @@ header h1 {
     font-family: 'Montserrat', sans-serif;
     color: var(--cor-texto-secundario);
     font-size: 1.3rem;
-    margin: 0;
     font-weight: 400;
 }
 
@@ -124,7 +135,6 @@ main {
 
 .tab-button:hover {
     color: var(--cor-texto);
-    background-color: var(--cor-primaria-transparente);
 }
 
 .tab-button.active {
@@ -137,8 +147,12 @@ main {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* =====================================================
@@ -146,8 +160,8 @@ main {
    ===================================================== */
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
 }
 
 .menu-card {
@@ -156,6 +170,8 @@ main {
     overflow: hidden;
     cursor: pointer;
     border: 1px solid var(--cor-borda);
+    display: flex;
+    flex-direction: column; /* Garante alinhamento interno */
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -164,35 +180,50 @@ main {
     border-color: var(--cor-primaria);
 }
 
+.card-img-container {
+    width: 40%;
+    height: 40%; /* Altura da imagem ajustada */
+    overflow: hidden;
+}
+
+/* Estiliza a imagem dentro do card. */
 .menu-card img {
+    /* Faz a imagem ocupar 100% da largura do card. */
     width: 100%;
+    /* Define uma altura fixa para a imagem. */
     height: 160px;
-    object-fit: cover;
+    /* Garante que a imagem cubra toda a área designada sem distorcer, cortando o excesso se necessário. */
+    object-fit: contain;
+
+    transform: scale(1.2);
 }
 
 .card-content {
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .card-content h3 {
     margin: 0 0 8px 0;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--cor-texto);
 }
 
 .card-content .descricao {
     font-size: 0.85rem;
     color: var(--cor-texto-secundario);
-    min-height: 45px;
     line-height: 1.5;
+    flex-grow: 1;
+    margin-bottom: 10px;
 }
 
 .card-content .preco {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     text-align: right;
-    margin-top: 10px;
     color: var(--cor-primaria);
 }
 
@@ -200,7 +231,7 @@ main {
    --- ESTILO DO MODAL ---
    ===================================================== */
 .modal {
-    display: none;
+    display: none; /* Alterado para 'flex' via JS */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -213,16 +244,20 @@ main {
     animation: fadeIn 0.3s ease;
 }
 
+.modal.active {
+    display: flex;
+}
+
 .modal-content {
-    background-color: #1e1e1e;
-    color: #f5f5f5;
-    border: 1px solid #3a3a3a;
+    background-color: var(--cor-card);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
     border-radius: 10px;
-    animation: slide-down 0.5s ease;
+    animation: slide-down 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     width: 90%;
     max-width: 500px;
     position: relative;
-    max-height: 70vh;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
 }
@@ -248,6 +283,7 @@ main {
     font-size: 2rem;
     color: var(--cor-primaria);
     margin-top: 0;
+    margin-bottom: 15px;
 }
 
 .close-button {
@@ -259,37 +295,51 @@ main {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s ease;
+    z-index: 1;
 }
 
 .close-button:hover {
     color: var(--cor-primaria);
 }
 
-#combo-options {
+#combo-options,
+.observacoes {
     margin-top: 20px;
-    padding: 15px;
-    background-color: #2a2a2a;
-    border-radius: 8px;
 }
 
-#combo-options label, .observacoes label {
+#combo-options label,
+.observacoes label {
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
     font-size: 0.9rem;
-    color: #f5f5f5;
 }
 
-#combo-options select, textarea {
+#combo-options select,
+textarea,
+.form-group input {
     width: 100%;
     padding: 12px;
     border-radius: 5px;
-    background-color: #121212;
-    color: #f5f5f5;
-    border: 1px solid #3a3a3a;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
     font-size: 1rem;
     font-family: 'Inter', sans-serif;
-    box-sizing: border-box; 
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#combo-options select:focus,
+textarea:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px var(--cor-primaria-transparente);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
 }
 
 textarea::placeholder {
@@ -314,29 +364,9 @@ textarea::placeholder {
     background-color: rgb(255, 190, 110);
 }
 
-/* --- Formulários de Autenticação --- */
+/* --- Formulários de Autenticação (dentro do Modal) --- */
 .form-group {
     margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    color: #f5f5f5;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    background-color: #121212;
-    color: #f5f5f5;
-    border: 1px solid #3a3a3a;
-    font-size: 1rem;
-    font-family: 'Inter', sans-serif;
-    box-sizing: border-box;
 }
 
 .switch-form {
@@ -357,17 +387,9 @@ textarea::placeholder {
 }
 
 /* --- Adicionais no Modal --- */
-#total-price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: right;
-    margin-top: 20px;
-    color: var(--cor-primaria);
-}
-
 #modal-adicionais {
     margin-top: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     padding-top: 20px;
     border-top: 1px solid var(--cor-borda);
 }
@@ -404,7 +426,7 @@ textarea::placeholder {
 
 .control-btn {
     background-color: var(--cor-primaria);
-    color: #121212;
+    color: var(--cor-fundo);
     border: none;
     width: 28px;
     height: 28px;
@@ -416,11 +438,15 @@ textarea::placeholder {
     align-items: center;
     justify-content: center;
     line-height: 1;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .control-btn:hover {
     background-color: rgb(255, 190, 110);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
 }
 
 .adicional-qtd {
@@ -430,8 +456,17 @@ textarea::placeholder {
     text-align: center;
 }
 
+#total-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+    color: var(--cor-primaria);
+}
+
+
 /* =====================================================
-   --- ESTILOS DO CARRINHO ---
+   --- ESTILOS DO CARRINHO (MODAL) ---
    ===================================================== */
 .cart-btn {
     font-size: 1.5rem;
@@ -440,8 +475,8 @@ textarea::placeholder {
 
 .cart-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 8px;
     padding: 15px 5px;
     border-bottom: 1px solid var(--cor-borda);
 }
@@ -450,13 +485,20 @@ textarea::placeholder {
     border-bottom: none;
 }
 
+.cart-item-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .cart-item-name {
     font-weight: bold;
 }
 
-.cart-item-price {
+.cart-item-details {
+    font-size: 0.8rem;
     color: var(--cor-texto-secundario);
-    font-size: 0.9rem;
+    padding-left: 5px;
 }
 
 .remove-btn {
@@ -494,6 +536,7 @@ textarea::placeholder {
     margin-bottom: 20px;
 }
 
+
 /* =====================================================
    --- RODAPÉ E MAPA ---
    ===================================================== */
@@ -512,10 +555,11 @@ textarea::placeholder {
     border-radius: 12px;
     border: 1px solid var(--cor-borda);
     margin-bottom: 20px;
+    background-color: #000;
 }
 
 .leaflet-container {
-    filter: brightness(0.9) contrast(1.1);
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
 }
 
 .address-container h3 {

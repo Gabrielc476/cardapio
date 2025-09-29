@@ -12,6 +12,6 @@ export function initializeMap(coordinates) {
     }).addTo(map);
 
     L.marker(coordinates).addTo(map)
-        .bindPopup('<b>Hamburgrr</b><br>Estamos esperando por você!')
+        .bindPopup('<b>Hamburguer Artesano</b><br>Estamos esperando por você!')
         .openPopup();
 }
