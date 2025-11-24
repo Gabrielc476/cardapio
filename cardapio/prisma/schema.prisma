@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id    Int        @id @default(autoincrement())
+  name  String     @unique
+  items MenuItem[]
+}
+
+model MenuItem {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  image       String
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  addons      AddonOnMenuItem[]
+}
+
+model Addon {
+  id    Int      @id @default(autoincrement())
+  name  String   @unique
+  price Float
+  items AddonOnMenuItem[]
+}
+
+model AddonOnMenuItem {
+
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  menuItemId Int
+
+  addon      Addon    @relation(fields: [addonId], references: [id])
+
+  addonId    Int
+
+
+
+  @@id([menuItemId, addonId])
+
+}
+
+
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("FUNCIONARIO")
+  createdAt DateTime @default(now())
+}
