@@ -1,54 +1,132 @@
 // js/modules/admin.js
-import { saveMenuData } from './storage.js';
+import { saveMenuData, getAllOrders, updateOrderStatus } from './storage.js';
 
-let adminModal;
-let productForm;
-let currentDataReference; // Referência aos dados principais
-let renderCallback; // Função para atualizar a tela
-let adicionaisContainer; // Referência ao container dos checkboxes
+let adminModal, adminOrdersModal; // Modais
+let productForm, adminOrdersList; // Elementos internos
+let currentDataReference;
+let renderCallback;
+let adicionaisContainer;
 
 export function initializeAdmin(data, updateViewCallback) {
     currentDataReference = data;
     renderCallback = updateViewCallback;
     
-    adminModal = document.getElementById('adminModal');
+    // --- Referências DOM ---
+    adminModal = document.getElementById('adminModal'); // Modal Produto
+    adminOrdersModal = document.getElementById('adminOrdersModal'); // Modal Pedidos (Novo)
     productForm = document.getElementById('product-form');
     adicionaisContainer = document.getElementById('adicionais-container');
+    adminOrdersList = document.getElementById('admin-orders-list');
+
+    // Botões Header
     const openAdminBtn = document.getElementById('open-admin-btn');
+    const openAdminOrdersBtn = document.getElementById('open-admin-orders-btn');
+    
+    // Botões Fechar
     const closeAdminBtn = document.querySelector('#adminModal .close-button');
+    const closeAdminOrdersBtn = document.querySelector('#adminOrdersModal .close-button');
 
-    openAdminBtn.addEventListener('click', () => {
-        openAdminModal(); 
-    });
-
-    closeAdminBtn.addEventListener('click', () => {
-        adminModal.style.display = 'none';
-    });
-
+    // --- Eventos Modal Produto ---
+    if(openAdminBtn) openAdminBtn.addEventListener('click', () => openAdminModal());
+    if(closeAdminBtn) closeAdminBtn.addEventListener('click', () => adminModal.style.display = 'none');
+    
     productForm.addEventListener('submit', (e) => {
         e.preventDefault();
         saveProductFromForm();
     });
 
+    // --- Eventos Modal Pedidos (NOVO) ---
+    if (openAdminOrdersBtn) {
+        openAdminOrdersBtn.addEventListener('click', () => {
+            renderAdminOrders();
+            adminOrdersModal.style.display = 'flex';
+        });
+    }
+
+    if (closeAdminOrdersBtn) {
+        closeAdminOrdersBtn.addEventListener('click', () => adminOrdersModal.style.display = 'none');
+    }
+
+    // Fechar ao clicar fora
     window.addEventListener('click', (event) => {
-        if (event.target === adminModal) {
-            adminModal.style.display = 'none';
-        }
+        if (event.target === adminModal) adminModal.style.display = 'none';
+        if (event.target === adminOrdersModal) adminOrdersModal.style.display = 'none';
     });
 }
 
-/**
- * Função auxiliar para extrair todos os tipos únicos de adicionais que existem no menu.
- */
+// --- LÓGICA DE PEDIDOS (NOVO) ---
+
+function renderAdminOrders() {
+    const orders = getAllOrders();
+    adminOrdersList.innerHTML = '';
+
+    if (orders.length === 0) {
+        adminOrdersList.innerHTML = '<p style="text-align:center; color:#888;">Nenhum pedido realizado ainda.</p>';
+        return;
+    }
+
+    orders.forEach(order => {
+        const orderCard = document.createElement('div');
+        orderCard.className = 'admin-order-card';
+
+        // Formata data
+        const dateObj = new Date(order.date);
+        const dateString = dateObj.toLocaleDateString('pt-BR') + ' ' + dateObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+
+        // Itens
+        const itemsSummary = order.items.map(i => `${i.quantity}x ${i.name}`).join(', ');
+
+        orderCard.innerHTML = `
+            <div class="admin-order-header">
+                <span class="order-id">#${order.id.toString().slice(-6)}</span>
+                <span class="order-date">${dateString}</span>
+            </div>
+            <div class="admin-order-info">
+                <p><strong>Cliente:</strong> ${order.userName} (${order.userEmail})</p>
+                <p><strong>Endereço:</strong> ${order.userAddress || 'Retirada'}</p>
+                <p><strong>Itens:</strong> <span style="color:#ccc;">${itemsSummary}</span></p>
+                <p><strong>Total:</strong> <span style="color:#ffaf50;">R$ ${order.total.toFixed(2).replace('.', ',')}</span></p>
+            </div>
+            <div class="admin-order-actions">
+                <label>Status:</label>
+                <select class="status-select" data-id="${order.id}">
+                    <option value="Recebido" ${order.status === 'Recebido' ? 'selected' : ''}>Recebido</option>
+                    <option value="Em Preparo" ${order.status === 'Em Preparo' ? 'selected' : ''}>Em Preparo</option>
+                    <option value="Saiu para Entrega" ${order.status === 'Saiu para Entrega' ? 'selected' : ''}>Saiu para Entrega</option>
+                    <option value="Entregue" ${order.status === 'Entregue' ? 'selected' : ''}>Entregue</option>
+                    <option value="Cancelado" ${order.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+                </select>
+            </div>
+        `;
+
+        adminOrdersList.appendChild(orderCard);
+    });
+
+    // Adiciona Listeners para mudança de status
+    const selects = adminOrdersList.querySelectorAll('.status-select');
+    selects.forEach(select => {
+        select.addEventListener('change', (e) => {
+            const newStatus = e.target.value;
+            const orderId = parseInt(e.target.dataset.id);
+            
+            updateOrderStatus(orderId, newStatus);
+            
+            // Feedback visual rápido (opcional, pode ser um toast)
+            e.target.style.borderColor = '#4cd137'; // Verde temporário
+            setTimeout(() => e.target.style.borderColor = '#3a3a3a', 1000);
+        });
+    });
+}
+
+
+// --- LÓGICA DE PRODUTOS (EXISTENTE) ---
+
 function getAllUniqueAdicionais() {
     const uniqueAds = new Map();
-
-    // Varre todas as categorias
     Object.values(currentDataReference).forEach(items => {
         items.forEach(item => {
             if (item.adicionais && Array.isArray(item.adicionais)) {
                 item.adicionais.forEach(add => {
-                    // Usa o nome como chave para evitar duplicatas
                     if (!uniqueAds.has(add.nome)) {
                         uniqueAds.set(add.nome, add.preco);
                     }
@@ -56,16 +134,12 @@ function getAllUniqueAdicionais() {
             }
         });
     });
-
-    // Adiciona alguns padrões se a lista estiver vazia (primeira execução)
     if (uniqueAds.size === 0) {
         uniqueAds.set("Bacon Extra", 5.00);
         uniqueAds.set("Queijo Cheddar", 4.00);
         uniqueAds.set("Carne Extra", 8.00);
-        uniqueAds.set("Molho Especial", 3.00);
     }
-
-    return uniqueAds; // Retorna um Map(Nome -> Preço)
+    return uniqueAds; 
 }
 
 export function openAdminModal(item = null, category = 'hamburgueres') {
@@ -77,7 +151,6 @@ export function openAdminModal(item = null, category = 'hamburgueres') {
     const catSelect = document.getElementById('prod-category');
     const imgInput = document.getElementById('prod-img');
 
-    // 1. Popula Categorias
     catSelect.innerHTML = '';
     Object.keys(currentDataReference).forEach(key => {
         const option = document.createElement('option');
@@ -86,11 +159,8 @@ export function openAdminModal(item = null, category = 'hamburgueres') {
         catSelect.appendChild(option);
     });
 
-    // 2. Gera os Checkboxes de Adicionais
     adicionaisContainer.innerHTML = '';
     const allAdicionais = getAllUniqueAdicionais();
-    
-    // Conjunto de nomes de adicionais que este item JÁ possui (para marcar os checkboxes)
     const existingAdicionaisNames = new Set();
     if (item && item.adicionais) {
         item.adicionais.forEach(a => existingAdicionaisNames.add(a.nome));
@@ -99,27 +169,17 @@ export function openAdminModal(item = null, category = 'hamburgueres') {
     allAdicionais.forEach((price, name) => {
         const label = document.createElement('label');
         label.className = 'adicional-option';
-        
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.value = name;
-        checkbox.dataset.price = price; // Guardamos o preço no dataset
-        
-        // Se estiver editando e o item tiver esse adicional, marca como checked
-        if (existingAdicionaisNames.has(name)) {
-            checkbox.checked = true;
-        }
-
+        checkbox.dataset.price = price;
+        if (existingAdicionaisNames.has(name)) checkbox.checked = true;
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(`${name} (R$ ${price.toFixed(2)})`));
-        
         adicionaisContainer.appendChild(label);
     });
 
-
-    // 3. Preenche o formulário
     if (item) {
-        // MODO EDIÇÃO
         title.textContent = 'Editar Produto';
         idInput.value = item.id;
         nameInput.value = item.nome;
@@ -129,13 +189,11 @@ export function openAdminModal(item = null, category = 'hamburgueres') {
         catSelect.value = category;
         catSelect.disabled = true; 
     } else {
-        // MODO CADASTRO
         title.textContent = 'Novo Produto';
         productForm.reset();
         idInput.value = '';
         catSelect.value = category;
         catSelect.disabled = false;
-        // Limpa checkboxes
         adicionaisContainer.querySelectorAll('input').forEach(cb => cb.checked = false);
     }
 
@@ -146,7 +204,6 @@ function saveProductFromForm() {
     const id = document.getElementById('prod-id').value;
     const category = document.getElementById('prod-category').value;
     
-    // Captura os adicionais selecionados
     const selectedAdicionais = [];
     const checkboxes = adicionaisContainer.querySelectorAll('input[type="checkbox"]:checked');
     checkboxes.forEach(cb => {
@@ -162,29 +219,23 @@ function saveProductFromForm() {
         descricao: document.getElementById('prod-desc').value,
         preco: parseFloat(document.getElementById('prod-price').value),
         imagem: document.getElementById('prod-img').value || 'img/logo.png',
-        adicionais: selectedAdicionais, // Salva a lista selecionada
+        adicionais: selectedAdicionais,
         ingredientes: {}
     };
 
     if (id) {
-        // EDITAR
         const index = currentDataReference[category].findIndex(p => p.id == id);
         if (index !== -1) {
-            // Preserva ingredientes antigos se existirem, mas sobrescreve adicionais
             newProduct.ingredientes = currentDataReference[category][index].ingredientes || {};
             currentDataReference[category][index] = newProduct;
         }
     } else {
-        // NOVO
-        if (!currentDataReference[category]) {
-            currentDataReference[category] = [];
-        }
+        if (!currentDataReference[category]) currentDataReference[category] = [];
         currentDataReference[category].push(newProduct);
     }
 
     saveMenuData(currentDataReference);
     alert('Produto salvo com sucesso!');
     adminModal.style.display = 'none';
-    
     renderCallback(); 
 }

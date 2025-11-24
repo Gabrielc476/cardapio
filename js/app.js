@@ -8,6 +8,7 @@ import { initializeAuth } from './modules/auth.js';
 import { initializeCart } from './modules/carrinho.js';
 import { initializeAdmin } from './modules/admin.js';
 import { initializeOrders } from './modules/orders.js'; 
+import { initializeDeliverySystem } from './modules/delivery.js'; // Novo Import
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFERÊNCIAS AOS ELEMENTOS PRINCIPAIS DO DOM ---
@@ -46,16 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Inicializa o Módulo de Pedidos
     initializeOrders();
 
-    // 5. Inicializa o Mapa com um pequeno delay
+    // 5. Inicializa o Módulo de Entregadores (NOVO)
+    initializeDeliverySystem();
+
+    // 6. Inicializa o Mapa com um pequeno delay
     const mapCoordinates = [-7.09338141728057, -34.85038717117099];
     setTimeout(() => {
         initializeMap(mapCoordinates);
     }, 100);
 
-    // 6. Inicializa os modais de autenticação
+    // 7. Inicializa os modais de autenticação
     initializeAuth();
 
-    // 7. Inicializa o carrinho
+    // 8. Inicializa o carrinho
     initializeCart();
 
     // --- EVENT LISTENERS PRINCIPAIS ---

@@ -14,12 +14,16 @@
     <header>
         <h1>Hamburguer Artesano</h1>
         <div class="auth-buttons">
-            <!-- Botão Admin oculto por padrão (display: none) -->
-            <button id="open-admin-btn" class="auth-btn" style="border-color: #ff4757; color: #ff4757; display: none;">⚙️ Admin</button>
+            <!-- BOTÕES DE ADMIN (Ocultos por padrão) -->
+            <button id="open-admin-btn" class="auth-btn" style="border-color: #ff4757; color: #ff4757; display: none;">⚙️ Novo Produto</button>
+            <button id="open-admin-orders-btn" class="auth-btn" style="border-color: #ff9f43; color: #ff9f43; display: none;">📦 Gerenciar Pedidos</button>
             
             <!-- Botão Meus Pedidos oculto por padrão -->
             <button id="open-orders-btn" class="auth-btn" style="display: none;">📜 Meus Pedidos</button>
             
+            <!-- Entregadores -->
+            <button id="open-delivery-btn" class="auth-btn">🛵 Entregadores</button>
+
             <button id="open-login" class="auth-btn">Login</button>
             <button id="open-register" class="auth-btn">Cadastro</button>
             <span id="user-icon" class="auth-btn user-icon" style="display: none;">👤</span>
@@ -34,7 +38,6 @@
 
     <main id="menu-container">
         <nav id="tabs-navigation" class="tabs-nav"></nav>
-        
         <div id="tabs-content"></div>
     </main>
     
@@ -45,22 +48,16 @@
             <div class="modal-body">
                 <h3 id="modal-title">Nome do Item</h3>
                 <p id="modal-description">Descrição completa do item.</p>
-                
                 <div id="modal-adicionais"></div>
-
                 <div id="combo-options" style="display: none;">
                     <label for="refrigerante-select">Escolha sua bebida:</label>
                     <select id="refrigerante-select"></select>
                 </div>
-
                 <div class="observacoes">
                     <label for="observacoes-input">Observações:</label>
                     <textarea id="observacoes-input" rows="3" placeholder="Ex: Sem cebola, ponto da carne mal passado..."></textarea>
                 </div>
-
                 <p id="total-price" class="preco">Total: R$ 00,00</p>
-
-                <!-- Ações do Modal de Item -->
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button id="edit-product-btn" style="background-color: #333; width: 30%; margin-top: 0;">✏️ Editar</button>
                     <button style="margin-top: 0;">Adicionar ao Pedido</button>
@@ -123,8 +120,7 @@
             <span class="close-button">&times;</span>
             <div class="modal-body">
                 <h3>Meu Carrinho</h3>
-                <div id="cart-items-container">
-                    </div>
+                <div id="cart-items-container"></div>
                 <div id="cart-footer">
                     <p id="cart-total-price" class="preco">Total: R$ 0,00</p>
                     <button>Finalizar Pedido</button>
@@ -133,20 +129,31 @@
         </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO DE PEDIDOS (NOVO) -->
+    <!-- MODAL DE HISTÓRICO DE PEDIDOS (CLIENTE) -->
     <div id="ordersModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <div class="modal-body">
                 <h3>Meus Pedidos</h3>
-                <div id="orders-list" style="max-height: 60vh; overflow-y: auto;">
-                    <!-- Pedidos serão renderizados aqui via JS -->
+                <div id="orders-list" style="max-height: 60vh; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE GERENCIAMENTO DE PEDIDOS (ADMIN) - NOVO -->
+    <div id="adminOrdersModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3 style="color: #ff9f43;">Gerenciar Pedidos</h3>
+                <div id="admin-orders-list" style="max-height: 70vh; overflow-y: auto;">
+                    <!-- Lista de pedidos do admin será injetada aqui -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE ADMIN (CADASTRO/EDIÇÃO) -->
+    <!-- MODAL DE ADMIN (PRODUTO) -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -154,42 +161,51 @@
                 <h3 id="admin-modal-title">Novo Produto</h3>
                 <form id="product-form">
                     <input type="hidden" id="prod-id">
-                    
                     <div class="form-group">
                         <label>Categoria</label>
                         <select id="prod-category" required></select>
                     </div>
-
                     <div class="form-group">
                         <label>Nome do Produto</label>
                         <input type="text" id="prod-name" required>
                     </div>
-
                     <div class="form-group">
                         <label>Descrição</label>
                         <textarea id="prod-desc" required></textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Preço (R$)</label>
                         <input type="number" id="prod-price" step="0.01" required>
                     </div>
-
                     <div class="form-group">
-                        <label>URL da Imagem (Ex: img/batata.png)</label>
+                        <label>URL da Imagem</label>
                         <input type="text" id="prod-img">
                     </div>
-
-                    <!-- Seleção de Adicionais -->
                     <div class="form-group">
                         <label>Adicionais Disponíveis:</label>
-                        <div id="adicionais-container" class="adicionais-grid">
-                            <!-- Checkboxes serão inseridos aqui via JS -->
-                        </div>
+                        <div id="adicionais-container" class="adicionais-grid"></div>
                     </div>
-
                     <button type="submit" style="background-color: #ff4757; color: white;">Salvar Produto</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ENTREGADORES -->
+    <div id="deliveryModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3>Buscar Entregadores</h3>
+                <form id="delivery-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <input type="text" id="delivery-address" placeholder="Digite seu endereço (Ex: Rua do Porto, Centro)" required>
+                    <button id="search-delivery-btn" style="width: auto; margin-top: 0;">🔍 Buscar</button>
+                </form>
+                <div id="delivery-map" style="height: 250px; width: 100%; border-radius: 8px; margin-bottom: 20px;"></div>
+                <h4>Entregadores Próximos</h4>
+                <div id="drivers-list" class="drivers-grid">
+                    <p style="color: #888;">Digite um endereço para buscar.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -205,8 +221,6 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
     <script type="module" src="js/app.js"></script>
-
 </body>
 </html>
