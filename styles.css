@@ -1,17 +1,14 @@
 /**
  * @file styles.css
- * @author Gabriel Castro (editado e comentado por Gemini)
- * @brief Folha de estilos principal para a aplicação de cardápio.
- * Define a aparência geral, layout, cores e responsividade.
+ * @author Gabriel Castro
+ * @brief Folha de estilos completa para a aplicação de cardápio.
  */
 
 /* =====================================================
    --- GERAL, RESET E PALETA DE CORES ---
    ===================================================== */
-/* Importa as fontes 'Inter' e 'Montserrat' do serviço Google Fonts. */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
 
-/* Variáveis CSS Globais */
 :root {
     --cor-primaria: rgb(255, 175, 80);
     --cor-primaria-transparente: rgba(255, 175, 80, 0.15);
@@ -22,7 +19,6 @@
     --cor-texto-secundario: #a0a0a0;
 }
 
-/* Reset e Padrões Globais */
 *,
 *::before,
 *::after {
@@ -49,8 +45,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Para melhor responsividade */
-    gap: 15px;      /* Espaçamento se os itens quebrarem a linha */
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 header h1 {
@@ -61,26 +57,33 @@ header h1 {
 
 .auth-buttons {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .auth-btn {
     font-family: 'Montserrat', sans-serif;
-    padding: 8px 18px;
+    padding: 8px 15px;
     border: 1px solid var(--cor-primaria);
     background-color: transparent;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--cor-primaria);
     border-radius: 5px;
     transition: all 0.2s ease-in-out;
+    white-space: nowrap;
 }
 
 .auth-btn:hover {
     background-color: var(--cor-primaria);
     color: var(--cor-fundo);
+}
+
+.user-icon {
+    border: none;
+    font-size: 1.1rem;
 }
 
 /* =====================================================
@@ -148,12 +151,8 @@ main {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 /* =====================================================
@@ -172,7 +171,7 @@ main {
     cursor: pointer;
     border: 1px solid var(--cor-borda);
     display: flex;
-    flex-direction: column; /* Garante alinhamento interno */
+    flex-direction: column;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -181,21 +180,10 @@ main {
     border-color: var(--cor-primaria);
 }
 
-.card-img-container {
-    width: 40%;
-    height: 40%; /* Altura da imagem ajustada */
-    overflow: hidden;
-}
-
-/* Estiliza a imagem dentro do card. */
 .menu-card img {
-    /* Faz a imagem ocupar 100% da largura do card. */
     width: 100%;
-    /* Define uma altura fixa para a imagem. */
     height: 160px;
-    /* Garante que a imagem cubra toda a área designada sem distorcer, cortando o excesso se necessário. */
     object-fit: contain;
-
     transform: scale(1.2);
     margin-top: 10px;
 }
@@ -230,10 +218,10 @@ main {
 }
 
 /* =====================================================
-   --- ESTILO DO MODAL ---
+   --- ESTILO GERAL DOS MODAIS ---
    ===================================================== */
 .modal {
-    display: none; /* Alterado para 'flex' via JS */
+    display: none; /* Controlado via JS (flex) */
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -242,12 +230,9 @@ main {
     height: 100%;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.85);
     animation: fadeIn 0.3s ease;
-}
-
-.modal.active {
-    display: flex;
+    backdrop-filter: blur(2px);
 }
 
 .modal-content {
@@ -262,17 +247,12 @@ main {
     max-height: 90vh;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
 @keyframes slide-down {
-    from {
-        transform: translateY(-30px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-body {
@@ -282,10 +262,10 @@ main {
 
 .modal-body h3 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--cor-primaria);
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .close-button {
@@ -297,29 +277,30 @@ main {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s ease;
-    z-index: 1;
+    z-index: 10;
 }
 
 .close-button:hover {
     color: var(--cor-primaria);
 }
 
-#combo-options,
-.observacoes {
-    margin-top: 20px;
+/* Inputs e Forms dentro dos Modais */
+.form-group {
+    margin-bottom: 15px;
 }
 
-#combo-options label,
-.observacoes label {
+.form-group label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-weight: bold;
     font-size: 0.9rem;
 }
 
+.form-group input, 
+.form-group select, 
+.form-group textarea,
 #combo-options select,
-textarea,
-.form-group input {
+textarea {
     width: 100%;
     padding: 12px;
     border-radius: 5px;
@@ -331,21 +312,17 @@ textarea,
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-#combo-options select:focus,
-textarea:focus,
-.form-group input:focus {
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
     outline: none;
     border-color: var(--cor-primaria);
-    box-shadow: 0 0 0 3px var(--cor-primaria-transparente);
+    box-shadow: 0 0 0 2px var(--cor-primaria-transparente);
 }
 
 textarea {
     resize: vertical;
     min-height: 80px;
-}
-
-textarea::placeholder {
-    color: #888;
 }
 
 .modal-body button {
@@ -366,11 +343,7 @@ textarea::placeholder {
     background-color: rgb(255, 190, 110);
 }
 
-/* --- Formulários de Autenticação (dentro do Modal) --- */
-.form-group {
-    margin-bottom: 20px;
-}
-
+/* Links de troca Login/Cadastro */
 .switch-form {
     text-align: center;
     margin-top: 20px;
@@ -388,7 +361,9 @@ textarea::placeholder {
     text-decoration: underline;
 }
 
-/* --- Adicionais no Modal --- */
+/* =====================================================
+   --- DETALHES DO ITEM (ADICIONAIS) ---
+   ===================================================== */
 #modal-adicionais {
     margin-top: 25px;
     margin-bottom: 15px;
@@ -409,10 +384,6 @@ textarea::placeholder {
     align-items: center;
     padding: 10px 0;
     border-bottom: 1px solid #2a2a2a;
-}
-
-.adicional-item:last-child {
-    border-bottom: none;
 }
 
 .adicional-nome {
@@ -440,15 +411,6 @@ textarea::placeholder {
     align-items: center;
     justify-content: center;
     line-height: 1;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.control-btn:hover {
-    background-color: rgb(255, 190, 110);
-}
-
-.control-btn:active {
-    transform: scale(0.95);
 }
 
 .adicional-qtd {
@@ -466,41 +428,34 @@ textarea::placeholder {
     color: var(--cor-primaria);
 }
 
-
 /* =====================================================
-   --- ESTILOS DO CARRINHO (MODAL) ---
+   --- ESTILOS DO CARRINHO ---
    ===================================================== */
 .cart-btn {
-    font-size: 1.5rem;
-    padding: 5px 15px;
+    font-size: 1.3rem;
 }
 
 .cart-item {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    justify-content: space-between;
+    align-items: center;
     padding: 15px 5px;
     border-bottom: 1px solid var(--cor-borda);
 }
 
-.cart-item:last-child {
-    border-bottom: none;
-}
-
 .cart-item-info {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 }
 
 .cart-item-name {
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
-.cart-item-details {
-    font-size: 0.8rem;
-    color: var(--cor-texto-secundario);
-    padding-left: 5px;
+.cart-item-price {
+    font-size: 0.9rem;
+    color: var(--cor-primaria);
 }
 
 .remove-btn {
@@ -510,9 +465,8 @@ textarea::placeholder {
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s ease;
     font-size: 0.8rem;
-    margin-top: 5px;
+    transition: all 0.2s ease;
 }
 
 .remove-btn:hover {
@@ -531,15 +485,6 @@ textarea::placeholder {
     margin-top: 20px;
     padding-top: 20px;
 }
-
-#cart-total-price {
-    text-align: right;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--cor-primaria);
-    margin-bottom: 20px;
-}
-
 
 /* =====================================================
    --- RODAPÉ E MAPA ---
@@ -580,7 +525,7 @@ textarea::placeholder {
 }
 
 /* =====================================================
-   --- ESTILOS DO PAINEL DE ADMIN (PRODUTOS) ---
+   --- PAINEL DE ADMIN (NOVO PRODUTO) ---
    ===================================================== */
 .adicionais-grid {
     display: grid;
@@ -604,11 +549,11 @@ textarea::placeholder {
 .adicional-option input {
     margin-right: 8px;
     width: auto;
-    box-shadow: none; /* Remove o glow padrão dos inputs */
+    box-shadow: none;
 }
 
 /* =====================================================
-   --- ESTILOS DO HISTÓRICO DE PEDIDOS (CLIENTE) ---
+   --- HISTÓRICO DE PEDIDOS (CLIENTE) ---
    ===================================================== */
 .order-card {
     background-color: #2a2a2a;
@@ -639,12 +584,8 @@ textarea::placeholder {
     color: var(--cor-texto-secundario);
 }
 
-.order-total {
-    font-size: 1.1rem;
-}
-
 .order-status {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #fff;
     margin-bottom: 10px;
     background-color: #333;
@@ -671,51 +612,7 @@ textarea::placeholder {
 }
 
 /* =====================================================
-   --- ESTILOS DO SISTEMA DE ENTREGADORES ---
-   ===================================================== */
-.drivers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.driver-card {
-    background-color: #252525;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.driver-info {
-    margin-bottom: 5px;
-}
-
-.driver-name {
-    font-weight: bold;
-    color: #fff;
-    display: block;
-}
-
-.driver-vehicle {
-    font-size: 0.8rem;
-    color: #ccc;
-}
-
-.driver-stats {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--cor-primaria);
-    font-weight: bold;
-}
-
-/* =====================================================
-   --- ESTILOS DO PAINEL DE PEDIDOS (ADMIN) ---
+   --- PAINEL DE GESTÃO DE PEDIDOS (ADMIN) ---
    ===================================================== */
 .admin-order-card {
     background-color: #2a2a2a;
@@ -770,4 +667,105 @@ textarea::placeholder {
 .status-select:focus {
     border-color: var(--cor-primaria);
     outline: none;
+}
+
+/* =====================================================
+   --- SISTEMA DE ENTREGADORES ---
+   ===================================================== */
+.drivers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+.driver-card {
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.driver-info {
+    margin-bottom: 5px;
+}
+
+.driver-name {
+    font-weight: bold;
+    color: #fff;
+    display: block;
+}
+
+.driver-vehicle {
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+.driver-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--cor-primaria);
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* =====================================================
+   --- CHEF IA (GEMINI) ---
+   ===================================================== */
+.ai-chat-interface {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.ai-chat-interface input {
+    flex-grow: 1;
+    border-color: #9b59b6;
+}
+
+.ai-chat-interface input:focus {
+    box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+    border-color: #9b59b6;
+}
+
+.ai-recommendation-card {
+    animation: fadeIn 0.5s ease;
+    margin-top: 20px;
+}
+
+.ai-reason {
+    background-color: rgba(155, 89, 182, 0.1);
+    border: 1px solid #9b59b6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.ai-avatar {
+    font-weight: bold;
+    color: #9b59b6;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.ai-reason p {
+    font-style: italic;
+    color: #eee;
+    line-height: 1.5;
+}
+
+.ai-add-btn {
+    background-color: #9b59b6 !important;
+    margin-top: 10px;
+}
+
+.ai-add-btn:hover {
+    background-color: #8e44ad !important;
 }

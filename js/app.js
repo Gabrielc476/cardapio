@@ -1,5 +1,6 @@
 // js/app.js
 
+// Importação de todos os módulos do sistema
 import { loadMenuData } from './modules/storage.js';
 import { createTabs, renderCategory } from './modules/ui.js';
 import { initializeModal } from './modules/modal.js';
@@ -8,7 +9,8 @@ import { initializeAuth } from './modules/auth.js';
 import { initializeCart } from './modules/carrinho.js';
 import { initializeAdmin } from './modules/admin.js';
 import { initializeOrders } from './modules/orders.js'; 
-import { initializeDeliverySystem } from './modules/delivery.js'; // Novo Import
+import { initializeDeliverySystem } from './modules/delivery.js';
+import { initializeAI } from './modules/ai.js'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFERÊNCIAS AOS ELEMENTOS PRINCIPAIS DO DOM ---
@@ -16,17 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabsContent = document.getElementById('tabs-content');
 
     // --- CARREGAMENTO DE DADOS ---
-    // Carrega do LocalStorage ou do arquivo padrão na primeira vez
+    // Carrega do LocalStorage ou do arquivo padrão na primeira vez.
+    // Isso garante que alterações do Admin persistam.
     const appData = loadMenuData(); 
 
-    // Função para atualizar a tela após edições no admin
+    // --- FUNÇÃO DE ATUALIZAÇÃO DA UI ---
+    // Passada como callback para o Admin atualizar a tela após editar produtos
     function refreshUI() {
         const activeBtn = document.querySelector('.tab-button.active');
         if (activeBtn) {
             const categoria = activeBtn.dataset.categoria;
             renderCategory(categoria, appData, tabsContent);
         } else {
-            // Se nenhuma aba estiver ativa, clica na primeira
+            // Se nenhuma aba estiver ativa, clica na primeira para iniciar
             if (document.querySelector('.tab-button')) {
                 document.querySelector('.tab-button').click();
             }
@@ -35,47 +39,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INICIALIZAÇÃO DOS MÓDULOS ---
 
-    // 1. Inicializa a UI do menu (Abas)
+    // 1. Cria as abas de categorias
     createTabs(appData, tabsNavigation);
 
-    // 2. Inicializa o Modal de Itens e obtém a função para abri-lo
+    // 2. Inicializa o Modal de Detalhes do Item
     const openModal = initializeModal();
 
-    // 3. Inicializa o Módulo Admin
+    // 3. Inicializa o Painel de Admin (Produtos e Pedidos)
     initializeAdmin(appData, refreshUI);
     
-    // 4. Inicializa o Módulo de Pedidos
+    // 4. Inicializa o Histórico de Pedidos (Cliente)
     initializeOrders();
 
-    // 5. Inicializa o Módulo de Entregadores (NOVO)
+    // 5. Inicializa o Sistema de Entregadores (Mapa e Busca)
     initializeDeliverySystem();
+    
+    // 6. Inicializa o Chef IA (Gemini)
+    initializeAI();
 
-    // 6. Inicializa o Mapa com um pequeno delay
+    // 7. Inicializa o Mapa do Rodapé (com delay para renderização correta)
     const mapCoordinates = [-7.09338141728057, -34.85038717117099];
     setTimeout(() => {
         initializeMap(mapCoordinates);
     }, 100);
 
-    // 7. Inicializa os modais de autenticação
+    // 8. Inicializa Autenticação (Login/Cadastro/Logout)
     initializeAuth();
 
-    // 8. Inicializa o carrinho
+    // 9. Inicializa o Carrinho (incluindo cálculo de frete)
     initializeCart();
 
-    // --- EVENT LISTENERS PRINCIPAIS ---
+    // --- EVENT LISTENERS GLOBAIS ---
 
-    // Listener para a navegação das abas
+    // Navegação entre abas (Hambúrgueres, Bebidas, etc.)
     tabsNavigation.addEventListener('click', (event) => {
         if (event.target.classList.contains('tab-button')) {
             const categoriaKey = event.target.dataset.categoria;
+            
+            // Gerencia classe active
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
+            // Renderiza o conteúdo
             renderCategory(categoriaKey, appData, tabsContent);
         }
     });
 
-    // Listener para o clique nos cards para ABRIR o modal de item
+    // Clique nos cards para abrir detalhes (Delegação de evento)
     tabsContent.addEventListener('click', (event) => {
         const card = event.target.closest('.menu-card');
         if (card) {
@@ -83,11 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemId = parseInt(card.dataset.id);
             const item = appData[categoriaKey].find(i => i.id === itemId);
             
-            // Passamos item, categoria e os dados completos
+            // Abre o modal passando os dados do item
             openModal(item, categoriaKey, appData);
         }
     });
 
-    // --- CARREGAMENTO INICIAL ---
+    // Carregamento inicial da primeira categoria
     refreshUI();
 });

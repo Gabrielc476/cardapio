@@ -14,14 +14,15 @@
     <header>
         <h1>Hamburguer Artesano</h1>
         <div class="auth-buttons">
-            <!-- BOTÕES DE ADMIN (Ocultos por padrão) -->
+            <!-- BOTÕES DE ADMIN -->
             <button id="open-admin-btn" class="auth-btn" style="border-color: #ff4757; color: #ff4757; display: none;">⚙️ Novo Produto</button>
             <button id="open-admin-orders-btn" class="auth-btn" style="border-color: #ff9f43; color: #ff9f43; display: none;">📦 Gerenciar Pedidos</button>
             
-            <!-- Botão Meus Pedidos oculto por padrão -->
             <button id="open-orders-btn" class="auth-btn" style="display: none;">📜 Meus Pedidos</button>
             
-            <!-- Entregadores -->
+            <!-- NOVO BOTÃO DE IA -->
+            <button id="open-ai-btn" class="auth-btn" style="border-color: #9b59b6; color: #9b59b6;">✨ Chef IA</button>
+
             <button id="open-delivery-btn" class="auth-btn">🛵 Entregadores</button>
 
             <button id="open-login" class="auth-btn">Login</button>
@@ -129,7 +130,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO DE PEDIDOS (CLIENTE) -->
+    <!-- MODAL DE HISTÓRICO DE PEDIDOS -->
     <div id="ordersModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -140,20 +141,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE GERENCIAMENTO DE PEDIDOS (ADMIN) - NOVO -->
-    <div id="adminOrdersModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
-            <span class="close-button">&times;</span>
-            <div class="modal-body">
-                <h3 style="color: #ff9f43;">Gerenciar Pedidos</h3>
-                <div id="admin-orders-list" style="max-height: 70vh; overflow-y: auto;">
-                    <!-- Lista de pedidos do admin será injetada aqui -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL DE ADMIN (PRODUTO) -->
+    <!-- MODAL DE ADMIN -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -191,6 +179,16 @@
         </div>
     </div>
 
+    <div id="adminOrdersModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3 style="color: #ff9f43;">Gerenciar Pedidos</h3>
+                <div id="admin-orders-list" style="max-height: 70vh; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: ENTREGADORES -->
     <div id="deliveryModal" class="modal">
         <div class="modal-content" style="max-width: 700px;">
@@ -198,7 +196,7 @@
             <div class="modal-body">
                 <h3>Buscar Entregadores</h3>
                 <form id="delivery-search-form" style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="delivery-address" placeholder="Digite seu endereço (Ex: Rua do Porto, Centro)" required>
+                    <input type="text" id="delivery-address" placeholder="Digite seu endereço" required>
                     <button id="search-delivery-btn" style="width: auto; margin-top: 0;">🔍 Buscar</button>
                 </form>
                 <div id="delivery-map" style="height: 250px; width: 100%; border-radius: 8px; margin-bottom: 20px;"></div>
@@ -206,6 +204,28 @@
                 <div id="drivers-list" class="drivers-grid">
                     <p style="color: #888;">Digite um endereço para buscar.</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOVO MODAL: CHEF IA -->
+    <div id="aiModal" class="modal">
+        <div class="modal-content" style="max-width: 500px; border-color: #9b59b6;">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3 style="color: #9b59b6;">Chef IA Artesano 🤖</h3>
+                <p style="color: #ccc; font-size: 0.9rem;">Diga o que você gosta (ex: "algo picante", "estou com muita fome") e eu escolho para você!</p>
+                
+                <div class="ai-chat-interface">
+                    <input type="text" id="ai-input" placeholder="O que você deseja comer hoje?" autocomplete="off">
+                    <button id="ai-send-btn" style="background-color: #9b59b6;">Enviar</button>
+                </div>
+
+                <div id="ai-loading" style="display: none; text-align: center; margin: 20px 0;">
+                    <p>🍳 O Chef está pensando...</p>
+                </div>
+
+                <div id="ai-result" style="margin-top: 20px;"></div>
             </div>
         </div>
     </div>
