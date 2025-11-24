@@ -1,16 +1,10 @@
 // js/modules/carrinho.js
+import { getCurrentSession, saveOrder } from './storage.js'; // Importe saveOrder e getCurrentSession
 
-// Referências aos elementos do DOM
 let cartModal, openCartBtn, closeCartBtn, cartItemsContainer, cartTotalPriceEl;
-
-// O estado do nosso carrinho
 let cart = [];
 
-/**
- * Renderiza os itens do carrinho no modal e atualiza o preço total.
- */
 function renderCart() {
-    // Limpa o container antes de renderizar
     cartItemsContainer.innerHTML = '';
     let totalPrice = 0;
 
@@ -41,22 +35,12 @@ function renderCart() {
     cartTotalPriceEl.textContent = `Total: R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
 }
 
-
-/**
- * Adiciona um item ao carrinho. Se o item já existir, atualiza a quantidade.
- * @param {object} itemToAdd - O objeto do item a ser adicionado.
- */
 export function addToCart(itemToAdd) {
-    // Simples adição, sem verificar duplicados por enquanto para manter a lógica clara
     cart.push(itemToAdd);
-    renderCart(); // Re-renderiza o carrinho com o novo item
-    openCartModal(); // Abre o carrinho para o usuário ver o que foi adicionado
+    renderCart();
+    openCartModal();
 }
 
-/**
- * Remove um item do carrinho pelo seu índice.
- * @param {number} index - O índice do item a ser removido.
- */
 function removeFromCart(index) {
     cart.splice(index, 1);
     renderCart();
@@ -70,17 +54,13 @@ function closeCartModal() {
     cartModal.style.display = 'none';
 }
 
-
-/**
- * Inicializa o módulo do carrinho, pegando referências do DOM e adicionando listeners.
- */
 export function initializeCart() {
     cartModal = document.getElementById('cartModal');
     openCartBtn = document.getElementById('open-cart-btn');
     closeCartBtn = document.querySelector('#cartModal .close-button');
     cartItemsContainer = document.getElementById('cart-items-container');
     cartTotalPriceEl = document.getElementById('cart-total-price');
-    const finalizeOrderBtn = document.querySelector('#cart-footer button'); // Pega o botão de finalizar
+    const finalizeOrderBtn = document.querySelector('#cart-footer button');
 
     openCartBtn.addEventListener('click', openCartModal);
     closeCartBtn.addEventListener('click', closeCartModal);
@@ -91,7 +71,6 @@ export function initializeCart() {
         }
     });
 
-    // Listener para os botões de remover (usa delegação de eventos)
     cartItemsContainer.addEventListener('click', (event) => {
         if (event.target.classList.contains('remove-btn')) {
             const index = parseInt(event.target.dataset.index, 10);
@@ -99,22 +78,46 @@ export function initializeCart() {
         }
     });
 
-    // Listener para o botão de finalizar pedido
+    // --- LÓGICA DE FINALIZAR PEDIDO ATUALIZADA ---
     finalizeOrderBtn.addEventListener('click', () => {
         if (cart.length === 0) {
             alert('Seu carrinho está vazio!');
             return;
         }
 
-        const totalPriceText = cartTotalPriceEl.textContent;
-        alert(`Pedido finalizado!\n${totalPriceText}`);
+        // Verifica autenticação
+        const user = getCurrentSession();
+        if (!user) {
+            alert('Por favor, faça login para finalizar o pedido.');
+            closeCartModal();
+            document.getElementById('open-login').click(); // Abre modal de login
+            return;
+        }
 
-        // Limpa o carrinho
+        // Calcula total
+        const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+        // Cria o objeto do pedido
+        const newOrder = {
+            id: Date.now(),
+            userEmail: user.email,
+            userName: user.name,
+            items: [...cart], // Cópia do carrinho
+            total: total,
+            date: new Date().toISOString(),
+            status: 'Recebido' // Status inicial
+        };
+
+        // Salva
+        saveOrder(newOrder);
+
+        alert(`Pedido realizado com sucesso!\nValor Total: R$ ${total.toFixed(2).replace('.', ',')}`);
+
+        // Limpa carrinho e fecha
         cart = [];
         renderCart();
         closeCartModal();
     });
 
-    // Renderiza o carrinho inicialmente (para mostrar a mensagem de vazio)
     renderCart();
 }

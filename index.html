@@ -12,14 +12,20 @@
 <body>
 
     <header>
-    <h1>Hamburguer Artesano</h1>
-    <div class="auth-buttons">
-        <button id="open-login" class="auth-btn">Login</button>
-        <button id="open-register" class="auth-btn">Cadastro</button>
-        <span id="user-icon" class="auth-btn user-icon" style="display: none;">👤</span>
-        <button id="open-cart-btn" class="auth-btn cart-btn">🛒</button>
-    </div>
-</header>
+        <h1>Hamburguer Artesano</h1>
+        <div class="auth-buttons">
+            <!-- Botão Admin oculto por padrão (display: none) -->
+            <button id="open-admin-btn" class="auth-btn" style="border-color: #ff4757; color: #ff4757; display: none;">⚙️ Admin</button>
+            
+            <!-- Botão Meus Pedidos oculto por padrão -->
+            <button id="open-orders-btn" class="auth-btn" style="display: none;">📜 Meus Pedidos</button>
+            
+            <button id="open-login" class="auth-btn">Login</button>
+            <button id="open-register" class="auth-btn">Cadastro</button>
+            <span id="user-icon" class="auth-btn user-icon" style="display: none;">👤</span>
+            <button id="open-cart-btn" class="auth-btn cart-btn">🛒</button>
+        </div>
+    </header>
     
     <section id="hero-section">
         <img src="img/logo.png" alt="Logo da Hamburgueria" class="logo">
@@ -32,6 +38,7 @@
         <div id="tabs-content"></div>
     </main>
     
+    <!-- MODAL DE DETALHES DO ITEM -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -53,11 +60,16 @@
 
                 <p id="total-price" class="preco">Total: R$ 00,00</p>
 
-                <button>Adicionar ao Pedido</button>
+                <!-- Ações do Modal de Item -->
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button id="edit-product-btn" style="background-color: #333; width: 30%; margin-top: 0;">✏️ Editar</button>
+                    <button style="margin-top: 0;">Adicionar ao Pedido</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL DE LOGIN -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -79,6 +91,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE CADASTRO -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -104,6 +117,7 @@
         </div>
     </div>
 
+    <!-- MODAL DO CARRINHO -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
@@ -115,6 +129,67 @@
                     <p id="cart-total-price" class="preco">Total: R$ 0,00</p>
                     <button>Finalizar Pedido</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTÓRICO DE PEDIDOS (NOVO) -->
+    <div id="ordersModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3>Meus Pedidos</h3>
+                <div id="orders-list" style="max-height: 60vh; overflow-y: auto;">
+                    <!-- Pedidos serão renderizados aqui via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE ADMIN (CADASTRO/EDIÇÃO) -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div class="modal-body">
+                <h3 id="admin-modal-title">Novo Produto</h3>
+                <form id="product-form">
+                    <input type="hidden" id="prod-id">
+                    
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="prod-category" required></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome do Produto</label>
+                        <input type="text" id="prod-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea id="prod-desc" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preço (R$)</label>
+                        <input type="number" id="prod-price" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>URL da Imagem (Ex: img/batata.png)</label>
+                        <input type="text" id="prod-img">
+                    </div>
+
+                    <!-- Seleção de Adicionais -->
+                    <div class="form-group">
+                        <label>Adicionais Disponíveis:</label>
+                        <div id="adicionais-container" class="adicionais-grid">
+                            <!-- Checkboxes serão inseridos aqui via JS -->
+                        </div>
+                    </div>
+
+                    <button type="submit" style="background-color: #ff4757; color: white;">Salvar Produto</button>
+                </form>
             </div>
         </div>
     </div>

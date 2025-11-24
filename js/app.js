@@ -1,35 +1,61 @@
 // js/app.js
 
-import { menuData } from './data/menu.js';
+import { loadMenuData } from './modules/storage.js';
 import { createTabs, renderCategory } from './modules/ui.js';
 import { initializeModal } from './modules/modal.js';
 import { initializeMap } from './modules/map.js';
 import { initializeAuth } from './modules/auth.js';
 import { initializeCart } from './modules/carrinho.js';
+import { initializeAdmin } from './modules/admin.js';
+import { initializeOrders } from './modules/orders.js'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFERÊNCIAS AOS ELEMENTOS PRINCIPAIS DO DOM ---
     const tabsNavigation = document.getElementById('tabs-navigation');
     const tabsContent = document.getElementById('tabs-content');
 
+    // --- CARREGAMENTO DE DADOS ---
+    // Carrega do LocalStorage ou do arquivo padrão na primeira vez
+    const appData = loadMenuData(); 
+
+    // Função para atualizar a tela após edições no admin
+    function refreshUI() {
+        const activeBtn = document.querySelector('.tab-button.active');
+        if (activeBtn) {
+            const categoria = activeBtn.dataset.categoria;
+            renderCategory(categoria, appData, tabsContent);
+        } else {
+            // Se nenhuma aba estiver ativa, clica na primeira
+            if (document.querySelector('.tab-button')) {
+                document.querySelector('.tab-button').click();
+            }
+        }
+    }
+
     // --- INICIALIZAÇÃO DOS MÓDULOS ---
 
-    // 1. Inicializa a UI do menu
-    createTabs(menuData, tabsNavigation);
+    // 1. Inicializa a UI do menu (Abas)
+    createTabs(appData, tabsNavigation);
 
     // 2. Inicializa o Modal de Itens e obtém a função para abri-lo
     const openModal = initializeModal();
 
-    // 3. Inicializa o Mapa com um pequeno delay para garantir a renderização correta
+    // 3. Inicializa o Módulo Admin
+    initializeAdmin(appData, refreshUI);
+    
+    // 4. Inicializa o Módulo de Pedidos
+    initializeOrders();
+
+    // 5. Inicializa o Mapa com um pequeno delay
     const mapCoordinates = [-7.09338141728057, -34.85038717117099];
     setTimeout(() => {
         initializeMap(mapCoordinates);
-    }, 100); // Um atraso de 100 milissegundos é o suficiente
+    }, 100);
 
-    // 4. Inicializa os modais de autenticação
+    // 6. Inicializa os modais de autenticação
     initializeAuth();
 
-    // 5. Inicializa o carrinho
+    // 7. Inicializa o carrinho
     initializeCart();
 
     // --- EVENT LISTENERS PRINCIPAIS ---
@@ -41,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            renderCategory(categoriaKey, menuData, tabsContent);
+            renderCategory(categoriaKey, appData, tabsContent);
         }
     });
 
@@ -51,16 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (card) {
             const categoriaKey = card.dataset.categoria;
             const itemId = parseInt(card.dataset.id);
-            const item = menuData[categoriaKey].find(i => i.id === itemId);
+            const item = appData[categoriaKey].find(i => i.id === itemId);
             
-            openModal(item, categoriaKey, menuData);
+            // Passamos item, categoria e os dados completos
+            openModal(item, categoriaKey, appData);
         }
     });
 
     // --- CARREGAMENTO INICIAL ---
-    
-    // Simula o clique na primeira aba para carregar o conteúdo inicial
-    if (document.querySelector('.tab-button')) {
-        document.querySelector('.tab-button').click();
-    }
+    refreshUI();
 });

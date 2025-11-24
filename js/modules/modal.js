@@ -1,8 +1,9 @@
 // js/modules/modal.js
 
 import { addToCart } from './carrinho.js';
+import { openAdminModal } from './admin.js'; // Novo import
 
-let modalElement, modalTitle, modalDescription, comboOptionsDiv, refrigeranteSelect, observacoesInput, closeModalButton, modalAdicionais, totalPriceElement, addToCartBtn;
+let modalElement, modalTitle, modalDescription, comboOptionsDiv, refrigeranteSelect, observacoesInput, closeModalButton, modalAdicionais, totalPriceElement, addToCartBtn, editProductBtn;
 
 let currentItemPrice = 0;
 let adicionaisPrice = 0;
@@ -17,11 +18,10 @@ function updateTotalPrice() {
 
 /**
  * Renderiza a lista de adicionais para um item.
- * @param {Array} adicionais - O array de adicionais do item.
  */
 function renderAdicionais(adicionais) {
     modalAdicionais.innerHTML = '';
-    adicionaisPrice = 0; // Reseta o preço dos adicionais
+    adicionaisPrice = 0; 
 
     if (!adicionais || adicionais.length === 0) {
         modalAdicionais.style.display = 'none';
@@ -73,9 +73,6 @@ function renderAdicionais(adicionais) {
 
 /**
  * Abre e popula o modal com os dados de um item.
- * @param {object} item - O objeto do item clicado.
- * @param {string} categoriaKey - A categoria do item.
- * @param {object} menuData - Os dados completos do menu.
  */
 function openModal(item, categoriaKey, menuData) {
     modalTitle.textContent = item.nome;
@@ -99,7 +96,9 @@ function openModal(item, categoriaKey, menuData) {
         comboOptionsDiv.style.display = 'none';
     }
     
+    // Armazena o item e a categoria no botão para uso posterior (adicionar ou editar)
     addToCartBtn.currentItem = item;
+    addToCartBtn.currentCategory = categoriaKey;
     
     updateTotalPrice();
     modalElement.style.display = 'flex';
@@ -111,7 +110,6 @@ function closeModal() {
 
 /**
  * Inicializa o modal, pegando as referências do DOM e configurando os eventos.
- * @returns {function} A função openModal para ser usada externamente.
  */
 export function initializeModal() {
     modalElement = document.getElementById('itemModal');
@@ -123,8 +121,14 @@ export function initializeModal() {
     observacoesInput = document.getElementById('observacoes-input');
     modalAdicionais = document.getElementById('modal-adicionais');
     totalPriceElement = document.getElementById('total-price');
-    addToCartBtn = document.querySelector('#itemModal button');
     
+    // Botão de Adicionar ao Carrinho (o segundo botão dentro do modal-body)
+    addToCartBtn = document.querySelector('#itemModal .modal-body button:last-of-type');
+    
+    // Botão de Editar Produto
+    editProductBtn = document.getElementById('edit-product-btn');
+
+    // Evento de Adicionar ao Carrinho
     addToCartBtn.addEventListener('click', () => {
         const item = addToCartBtn.currentItem;
         if (!item) return;
@@ -138,6 +142,13 @@ export function initializeModal() {
         
         addToCart(itemParaCarrinho);
         closeModal();
+    });
+
+    // Evento de Editar Produto
+    editProductBtn.addEventListener('click', () => {
+        closeModal();
+        // Abre o modal de admin em modo de edição
+        openAdminModal(addToCartBtn.currentItem, addToCartBtn.currentCategory);
     });
 
     closeModalButton.addEventListener('click', closeModal);
